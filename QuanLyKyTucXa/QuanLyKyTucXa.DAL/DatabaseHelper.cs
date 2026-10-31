@@ -1,50 +1,65 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient; // Bắt buộc phải có thư viện này để dùng ADO.NET
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace QuanLyKyTucXa.DAL
 {
     public class DatabaseHelper
     {
-        // LƯU Ý BẮT BUỘC: Sửa "ACER-NITRO\\SQLEXPRESS" thành tên Server SQL thực tế trên máy bạn.
-        private string connectionString = @"Data Source=ADMIN;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
+        // Tự động lấy chuỗi kết nối có tên "ConnStr" từ App.config
+        private string connectionString = ConfigurationManager.ConnectionStrings["ConnStr"].ConnectionString;
 
-        // Hàm thực thi các lệnh SELECT (Tra cứu dữ liệu)
-        // Trả về một DataTable chứa kết quả dạng bảng
+        // Hàm 1: Dành cho các câu lệnh SELECT (Lấy dữ liệu trả về DataTable)
         public DataTable ExecuteQuery(string query, SqlParameter[] parameters = null)
         {
             DataTable dataTable = new DataTable();
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     if (parameters != null)
                     {
-                        command.Parameters.AddRange(parameters);
+                        cmd.Parameters.AddRange(parameters);
                     }
-                    connection.Open();
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    adapter.Fill(dataTable);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            adapter.Fill(dataTable);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Lỗi truy vấn dữ liệu: " + ex.Message);
+                    }
                 }
             }
             return dataTable;
         }
 
-        // Hàm thực thi các lệnh INSERT, UPDATE, DELETE
-        // Trả về số dòng bị ảnh hưởng (nếu > 0 nghĩa là đã thêm/sửa/xóa thành công)
+        // Hàm 2: Dành cho các câu lệnh INSERT, UPDATE, DELETE (Trả về số dòng bị ảnh hưởng)
         public int ExecuteNonQuery(string query, SqlParameter[] parameters = null)
         {
             int affectedRows = 0;
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     if (parameters != null)
                     {
-                        command.Parameters.AddRange(parameters);
+                        cmd.Parameters.AddRange(parameters);
                     }
-                    connection.Open();
-                    affectedRows = command.ExecuteNonQuery();
+                    try
+                    {
+                        conn.Open();
+                        affectedRows = cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Lỗi thao tác dữ liệu: " + ex.Message);
+                    }
                 }
             }
             return affectedRows;
