@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -45,6 +45,12 @@ namespace QuanLyKyTucXa.GUI
 
             // Dùng ShowDialog() để cửa sổ bật lên, bắt buộc người dùng thao tác xong đóng lại 
             // mới được bấm tiếp các nút menu bên dưới màn hình chính.
+            frm.ShowDialog();
+        }
+
+        private void btnPhong_Click(object sender, EventArgs e)
+        {
+            frmQuanLyPhong frm = new frmQuanLyPhong();
             frm.ShowDialog();
         }
 

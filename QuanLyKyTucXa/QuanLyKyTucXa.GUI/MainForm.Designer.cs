@@ -1,4 +1,4 @@
-﻿namespace QuanLyKyTucXa.GUI
+namespace QuanLyKyTucXa.GUI
 {
     partial class MainForm
     {
@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pnlMenu = new System.Windows.Forms.Panel();
+            this.btnPhong = new System.Windows.Forms.Button();
             this.btnSinhVien = new System.Windows.Forms.Button();
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.pnlMenu.SuspendLayout();
@@ -37,6 +38,7 @@
             // 
             // pnlMenu
             // 
+            this.pnlMenu.Controls.Add(this.btnPhong);
             this.pnlMenu.Controls.Add(this.btnSinhVien);
             this.pnlMenu.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlMenu.Location = new System.Drawing.Point(0, 0);
@@ -44,6 +46,16 @@
             this.pnlMenu.Size = new System.Drawing.Size(200, 487);
             this.pnlMenu.TabIndex = 0;
             this.pnlMenu.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlMenu_Paint);
+            // 
+            // btnPhong
+            // 
+            this.btnPhong.Location = new System.Drawing.Point(21, 417);
+            this.btnPhong.Name = "btnPhong";
+            this.btnPhong.Size = new System.Drawing.Size(159, 23);
+            this.btnPhong.TabIndex = 2;
+            this.btnPhong.Text = "Quản lý Phòng & Dãy nhà";
+            this.btnPhong.UseVisualStyleBackColor = true;
+            this.btnPhong.Click += new System.EventHandler(this.btnPhong_Click);
             // 
             // btnSinhVien
             // 
@@ -86,6 +98,6 @@
         private System.Windows.Forms.Panel pnlMenu;
         private System.Windows.Forms.Panel pnlContainer;
         private System.Windows.Forms.Button btnSinhVien;
+        private System.Windows.Forms.Button btnPhong;
     }
 }
-

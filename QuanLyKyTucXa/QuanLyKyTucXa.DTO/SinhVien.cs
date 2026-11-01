@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,22 +31,22 @@ namespace QuanLyKyTucXa.DTO
     public class Phong
     {
         public string MaPhong { get; set; }
+        public string TenKhu { get; set; }
         public string LoaiPhong { get; set; }
-        public decimal DonGiaHienTai { get; set; }
-        public int SoChoToiDa { get; set; }
-        public string TrangThai { get; set; }
+        public int SoGiuongToiDa { get; set; }
+        public int SoGiuongTrong { get; set; }
+        public decimal DonGia { get; set; }
 
         public Phong() { }
 
-        public Phong(string maPhong, string loaiPhong, decimal donGia, int soCho, string trangThai)
+        public Phong(string maPhong, string tenKhu, string loaiPhong, int soGiuongToiDa, int soGiuongTrong, decimal donGia)
         {
             MaPhong = maPhong;
+            TenKhu = tenKhu;
             LoaiPhong = loaiPhong;
-            DonGiaHienTai = donGia;
-            SoChoToiDa = soCho;
-            TrangThai = trangThai;
+            SoGiuongToiDa = soGiuongToiDa;
+            SoGiuongTrong = soGiuongTrong;
+            DonGia = donGia;
         }
     }
-
-
 }
