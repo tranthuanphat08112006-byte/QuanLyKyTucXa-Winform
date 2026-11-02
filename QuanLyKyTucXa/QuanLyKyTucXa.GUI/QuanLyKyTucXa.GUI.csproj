@@ -46,18 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmChiTietSinhVien.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmChiTietSinhVien.Designer.cs">
-      <DependentUpon>frmChiTietSinhVien.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmQuanLySinhVien.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmQuanLySinhVien.Designer.cs">
-      <DependentUpon>frmQuanLySinhVien.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,46 +55,42 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UCSinhVien.cs">
+    <Compile Include="QuanLyPhong\frmChiTietPhong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QuanLyPhong\frmChiTietPhong.Designer.cs">
+      <DependentUpon>frmChiTietPhong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLyPhong\frmQuanLyPhong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QuanLyPhong\frmQuanLyPhong.Designer.cs">
+      <DependentUpon>frmQuanLyPhong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLyPhong\UCPhong.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UCSinhVien.Designer.cs">
+    <Compile Include="QuanLyPhong\UCPhong.Designer.cs">
+      <DependentUpon>UCPhong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLySinhVien\frmChiTietSinhVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QuanLySinhVien\frmChiTietSinhVien.Designer.cs">
+      <DependentUpon>frmChiTietSinhVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLySinhVien\frmQuanLySinhVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QuanLySinhVien\frmQuanLySinhVien.Designer.cs">
+      <DependentUpon>frmQuanLySinhVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLySinhVien\UCSinhVien.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QuanLySinhVien\UCSinhVien.Designer.cs">
       <DependentUpon>UCSinhVien.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIHelper.cs" />
-    <Compile Include="frmChiTietPhong.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmChiTietPhong.Designer.cs">
-      <DependentUpon>frmChiTietPhong.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmQuanLyPhong.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmQuanLyPhong.Designer.cs">
-      <DependentUpon>frmQuanLyPhong.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UCPhong.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UCPhong.Designer.cs">
-      <DependentUpon>UCPhong.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="frmChiTietPhong.resx">
-      <DependentUpon>frmChiTietPhong.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmQuanLyPhong.resx">
-      <DependentUpon>frmQuanLyPhong.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UCPhong.resx">
-      <DependentUpon>UCPhong.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmChiTietSinhVien.resx">
-      <DependentUpon>frmChiTietSinhVien.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmQuanLySinhVien.resx">
-      <DependentUpon>frmQuanLySinhVien.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -118,7 +103,22 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UCSinhVien.resx">
+    <EmbeddedResource Include="QuanLyPhong\frmChiTietPhong.resx">
+      <DependentUpon>frmChiTietPhong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QuanLyPhong\frmQuanLyPhong.resx">
+      <DependentUpon>frmQuanLyPhong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QuanLyPhong\UCPhong.resx">
+      <DependentUpon>UCPhong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QuanLySinhVien\frmChiTietSinhVien.resx">
+      <DependentUpon>frmChiTietSinhVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QuanLySinhVien\frmQuanLySinhVien.resx">
+      <DependentUpon>frmQuanLySinhVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QuanLySinhVien\UCSinhVien.resx">
       <DependentUpon>UCSinhVien.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">

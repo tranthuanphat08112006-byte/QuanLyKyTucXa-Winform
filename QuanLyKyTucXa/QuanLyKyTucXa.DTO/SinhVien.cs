@@ -27,26 +27,4 @@ namespace QuanLyKyTucXa.DTO
             GioiTinh = gioiTinh;
         }
     }
-
-    public class Phong
-    {
-        public string MaPhong { get; set; }
-        public string TenKhu { get; set; }
-        public string LoaiPhong { get; set; }
-        public int SoGiuongToiDa { get; set; }
-        public int SoGiuongTrong { get; set; }
-        public decimal DonGia { get; set; }
-
-        public Phong() { }
-
-        public Phong(string maPhong, string tenKhu, string loaiPhong, int soGiuongToiDa, int soGiuongTrong, decimal donGia)
-        {
-            MaPhong = maPhong;
-            TenKhu = tenKhu;
-            LoaiPhong = loaiPhong;
-            SoGiuongToiDa = soGiuongToiDa;
-            SoGiuongTrong = soGiuongTrong;
-            DonGia = donGia;
-        }
-    }
 }
