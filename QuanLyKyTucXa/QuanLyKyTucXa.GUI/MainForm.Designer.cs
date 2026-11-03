@@ -33,11 +33,13 @@ namespace QuanLyKyTucXa.GUI
             this.btnPhong = new System.Windows.Forms.Button();
             this.btnSinhVien = new System.Windows.Forms.Button();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.btnDangXuat = new System.Windows.Forms.Button();
             this.pnlMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMenu
             // 
+            this.pnlMenu.Controls.Add(this.btnDangXuat);
             this.pnlMenu.Controls.Add(this.btnPhong);
             this.pnlMenu.Controls.Add(this.btnSinhVien);
             this.pnlMenu.Dock = System.Windows.Forms.DockStyle.Left;
@@ -49,7 +51,7 @@ namespace QuanLyKyTucXa.GUI
             // 
             // btnPhong
             // 
-            this.btnPhong.Location = new System.Drawing.Point(21, 417);
+            this.btnPhong.Location = new System.Drawing.Point(21, 423);
             this.btnPhong.Name = "btnPhong";
             this.btnPhong.Size = new System.Drawing.Size(159, 23);
             this.btnPhong.TabIndex = 2;
@@ -59,7 +61,7 @@ namespace QuanLyKyTucXa.GUI
             // 
             // btnSinhVien
             // 
-            this.btnSinhVien.Location = new System.Drawing.Point(21, 452);
+            this.btnSinhVien.Location = new System.Drawing.Point(21, 394);
             this.btnSinhVien.Name = "btnSinhVien";
             this.btnSinhVien.Size = new System.Drawing.Size(159, 23);
             this.btnSinhVien.TabIndex = 1;
@@ -77,6 +79,16 @@ namespace QuanLyKyTucXa.GUI
             this.pnlContainer.Size = new System.Drawing.Size(545, 487);
             this.pnlContainer.TabIndex = 1;
             this.pnlContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlContainer_Paint);
+            // 
+            // btnDangXuat
+            // 
+            this.btnDangXuat.Location = new System.Drawing.Point(21, 452);
+            this.btnDangXuat.Name = "btnDangXuat";
+            this.btnDangXuat.Size = new System.Drawing.Size(159, 23);
+            this.btnDangXuat.TabIndex = 3;
+            this.btnDangXuat.Text = "Đăng xuất";
+            this.btnDangXuat.UseVisualStyleBackColor = true;
+            this.btnDangXuat.Click += new System.EventHandler(this.button1_Click);
             // 
             // MainForm
             // 
@@ -99,5 +111,6 @@ namespace QuanLyKyTucXa.GUI
         private System.Windows.Forms.Panel pnlContainer;
         private System.Windows.Forms.Button btnSinhVien;
         private System.Windows.Forms.Button btnPhong;
+        private System.Windows.Forms.Button btnDangXuat;
     }
 }

@@ -15,7 +15,7 @@ namespace QuanLyKyTucXa.GUI
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Lệnh này bảo Winform hãy chạy MainForm đầu tiên khi mở app
-            Application.Run(new MainForm());
+            Application.Run(new frmDangNhap());
         }
     }
 }

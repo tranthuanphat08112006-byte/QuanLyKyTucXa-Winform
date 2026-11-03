@@ -44,6 +44,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SinhVienBLL.cs" />
     <Compile Include="PhongBLL.cs" />
+    <Compile Include="TaiKhoanBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuanLyKyTucXa.DAL\QuanLyKyTucXa.DAL.csproj">
