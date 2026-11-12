@@ -1,57 +1,86 @@
-﻿using System;
+using System;
 using System.Data;
-using QuanLyKyTucXa.DAL; // Nhận diện tầng DAL
-using QuanLyKyTucXa.DTO; // (Sẽ dùng khi làm chức năng Thêm/Sửa/Xóa)
+using QuanLyKyTucXa.DAL;
+using QuanLyKyTucXa.DTO;
 
 namespace QuanLyKyTucXa.BLL
 {
     public class SinhVienBLL
     {
-        // Khởi tạo đối tượng DAL để gọi lệnh SQL
         private SinhVienDAL svDAL = new SinhVienDAL();
 
-        // Hàm lấy danh sách cung cấp cho Giao diện
         public DataTable GetAllSinhVien()
         {
-            // Tương lai bạn có thể thêm các logic kiểm tra quyền ở đây trước khi gọi DAL
             return svDAL.GetAllSinhVien();
+        }
+
+        public DataTable FilterSinhVien(string keyword, string gioiTinh)
+        {
+            return svDAL.FilterSinhVien(keyword ?? "", gioiTinh ?? "Tất cả giới tính");
+        }
+
+        public int CountSinhVienCoHopDong()
+        {
+            return svDAL.CountSinhVienCoHopDong();
+        }
+
+        private void ValidateSinhVien(SinhVien sv, bool isUpdate)
+        {
+            if (sv == null)
+                throw new Exception("Dữ liệu sinh viên không hợp lệ!");
+
+            sv.MaSV = (sv.MaSV ?? "").Trim();
+            sv.HoTen = (sv.HoTen ?? "").Trim();
+            sv.CCCD = (sv.CCCD ?? "").Trim();
+            sv.SDT = (sv.SDT ?? "").Trim();
+            sv.GioiTinh = (sv.GioiTinh ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(sv.MaSV) || string.IsNullOrWhiteSpace(sv.HoTen))
+                throw new Exception("Mã sinh viên và Họ tên không được để trống!");
+
+            if (string.IsNullOrWhiteSpace(sv.GioiTinh))
+                throw new Exception("Vui lòng chọn giới tính của sinh viên!");
+
+            if (string.IsNullOrWhiteSpace(sv.CCCD))
+                throw new Exception("Số CCCD / CMND không được để trống (yêu cầu duy nhất cho mỗi sinh viên)!");
+
+            if (!isUpdate && svDAL.CheckMaSVExists(sv.MaSV))
+                throw new Exception("Mã sinh viên này đã tồn tại trong hệ thống!");
+
+            if (svDAL.CheckCCCDExists(sv.CCCD, isUpdate ? sv.MaSV : null))
+                throw new Exception("Số CCCD / CMND '" + sv.CCCD + "' đã tồn tại ở sinh viên khác trong hệ thống! Mỗi sinh viên phải có một số CCCD riêng biệt.");
         }
 
         public bool InsertSinhVien(SinhVien sv)
         {
-            if (string.IsNullOrWhiteSpace(sv.MaSV) || string.IsNullOrWhiteSpace(sv.HoTen))
-                throw new Exception("Mã sinh viên và Họ tên không được để trống!");
-
-            // Chặn trùng mã sinh viên
-            if (svDAL.CheckMaSVExists(sv.MaSV))
-                throw new Exception("Mã sinh viên này đã tồn tại trong hệ thống!");
-
+            ValidateSinhVien(sv, false);
             return svDAL.InsertSinhVien(sv);
         }
 
-        // 1. Kiểm duyệt và gọi Update
         public bool UpdateSinhVien(SinhVien sv)
         {
-            if (string.IsNullOrWhiteSpace(sv.HoTen))
-            {
-                throw new Exception("Họ tên sinh viên không được để trống!");
-            }
+            ValidateSinhVien(sv, true);
             return svDAL.UpdateSinhVien(sv);
         }
 
-        // 2. Kiểm duyệt và gọi Delete
         public bool DeleteSinhVien(string maSV)
         {
             if (string.IsNullOrWhiteSpace(maSV))
             {
                 throw new Exception("Vui lòng chọn sinh viên cần xóa!");
             }
+
+            if (svDAL.CheckSinhVienHasHopDong(maSV))
+            {
+                throw new Exception("Không thể xóa sinh viên đang có dữ liệu Hợp đồng lưu trú trong hệ thống!");
+            }
+
             return svDAL.DeleteSinhVien(maSV);
         }
+
         public DataTable SearchSinhVien(string keyword)
         {
-            // Loại bỏ các khoảng trắng thừa trước khi tìm kiếm
-            keyword = keyword.Trim();
+            keyword = (keyword ?? "").Trim();
             return svDAL.SearchSinhVien(keyword);
         }
     }

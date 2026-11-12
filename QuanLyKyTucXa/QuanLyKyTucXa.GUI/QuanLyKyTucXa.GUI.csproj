@@ -8,10 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>QuanLyKyTucXa.GUI</RootNamespace>
     <AssemblyName>QuanLyKyTucXa.GUI</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,8 +34,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="ReaLTaiizor, Version=3.8.2.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReaLTaiizor.3.8.2.1\lib\net48\ReaLTaiizor.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,7 +52,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\UIHelper.cs" />
+    <Compile Include="frmChiTietDayNha.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChiTietDayNha.Designer.cs">
+      <DependentUpon>frmChiTietDayNha.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmChiTietSinhVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChiTietSinhVien.Designer.cs">
+      <DependentUpon>frmChiTietSinhVien.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -55,42 +72,37 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuanLyPhong\frmChiTietPhong.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="QuanLyPhong\frmChiTietPhong.Designer.cs">
-      <DependentUpon>frmChiTietPhong.cs</DependentUpon>
-    </Compile>
-    <Compile Include="QuanLyPhong\frmQuanLyPhong.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="QuanLyPhong\frmQuanLyPhong.Designer.cs">
-      <DependentUpon>frmQuanLyPhong.cs</DependentUpon>
-    </Compile>
-    <Compile Include="QuanLyPhong\UCPhong.cs">
+    <Compile Include="UCSinhVien.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="QuanLyPhong\UCPhong.Designer.cs">
-      <DependentUpon>UCPhong.cs</DependentUpon>
-    </Compile>
-    <Compile Include="QuanLySinhVien\frmChiTietSinhVien.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="QuanLySinhVien\frmChiTietSinhVien.Designer.cs">
-      <DependentUpon>frmChiTietSinhVien.cs</DependentUpon>
-    </Compile>
-    <Compile Include="QuanLySinhVien\frmQuanLySinhVien.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="QuanLySinhVien\frmQuanLySinhVien.Designer.cs">
-      <DependentUpon>frmQuanLySinhVien.cs</DependentUpon>
-    </Compile>
-    <Compile Include="QuanLySinhVien\UCSinhVien.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="QuanLySinhVien\UCSinhVien.Designer.cs">
+    <Compile Include="UCSinhVien.Designer.cs">
       <DependentUpon>UCSinhVien.cs</DependentUpon>
     </Compile>
+    <Compile Include="UIHelper.cs" />
+    <Compile Include="frmChiTietPhong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChiTietPhong.Designer.cs">
+      <DependentUpon>frmChiTietPhong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCPhong.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCPhong.Designer.cs">
+      <DependentUpon>UCPhong.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmChiTietDayNha.resx">
+      <DependentUpon>frmChiTietDayNha.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmChiTietPhong.resx">
+      <DependentUpon>frmChiTietPhong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCPhong.resx">
+      <DependentUpon>UCPhong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmChiTietSinhVien.resx">
+      <DependentUpon>frmChiTietSinhVien.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -102,25 +114,12 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="QuanLyPhong\frmChiTietPhong.resx">
-      <DependentUpon>frmChiTietPhong.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="QuanLyPhong\frmQuanLyPhong.resx">
-      <DependentUpon>frmQuanLyPhong.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="QuanLyPhong\UCPhong.resx">
-      <DependentUpon>UCPhong.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="QuanLySinhVien\frmChiTietSinhVien.resx">
-      <DependentUpon>frmChiTietSinhVien.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="QuanLySinhVien\frmQuanLySinhVien.resx">
-      <DependentUpon>frmQuanLySinhVien.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="QuanLySinhVien\UCSinhVien.resx">
+    <EmbeddedResource Include="UCSinhVien.resx">
       <DependentUpon>UCSinhVien.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
