@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Windows.Forms;
 using QuanLyKyTucXa.DTO;
 using QuanLyKyTucXa.BLL;
@@ -8,80 +9,209 @@ namespace QuanLyKyTucXa.GUI
     public partial class frmChiTietPhong : Form
     {
         private PhongBLL phongBLL = new PhongBLL();
-        private Phong phongCurrent = null; // Biến lưu phòng đang được sửa (null = Thêm mới)
+        private Phong phongCurrent = null;
+        private bool isReadOnly = false;
+        private bool isSyncingBeds = false;
 
-        // Constructor mặc định (Dùng cho Thêm mới)
         public frmChiTietPhong()
         {
             InitializeComponent();
-            this.Text = "Thêm mới Phòng & Dãy nhà";
-            nudSoGiuongToiDa.Value = 8;
-            nudSoGiuongTrong.Value = 8;
+            LoadDayNhaDropdown();
+
+            this.Text = "Thêm mới Phòng Ký túc xá";
+            lblFormTitle.Text = "THÊM PHÒNG KÝ TÚC XÁ MỚI";
+            lblFormSub.Text = "Nhập đầy đủ thông tin phòng, sức chứa tối đa và đơn giá lưu trú";
+
             if (cmbTenKhu.Items.Count > 0) cmbTenKhu.SelectedIndex = 0;
             if (cmbLoaiPhong.Items.Count > 0) cmbLoaiPhong.SelectedIndex = 0;
+            if (cmbTrangThai.Items.Count > 0) cmbTrangThai.SelectedIndex = 0;
+
+            SyncBedsFromSucChuaAndDangO();
         }
 
-        // Constructor overload (Dùng cho Chức năng Sửa - nhận đối tượng Phong từ UCPhong truyền sang)
-        public frmChiTietPhong(Phong p) : this()
+        public frmChiTietPhong(Phong p, bool readOnlyMode = false) : this()
         {
             this.phongCurrent = p;
-            this.Text = "Cập nhật thông tin Phòng (Thiết lập giá, sức chứa)";
+            this.isReadOnly = readOnlyMode;
 
-            // Đổ dữ liệu cũ lên các ô nhập liệu
             txtMaPhong.Text = p.MaPhong;
-            txtMaPhong.Enabled = false; // Khóa ô Mã Phòng không cho sửa (Khóa chính)
+            txtMaPhong.Enabled = false;
+            txtTenPhong.Text = string.IsNullOrWhiteSpace(p.TenPhong) ? ("Phòng " + p.MaPhong) : p.TenPhong;
+
+            if (!string.IsNullOrWhiteSpace(p.TenKhu) && !cmbTenKhu.Items.Contains(p.TenKhu))
+            {
+                cmbTenKhu.Items.Add(p.TenKhu);
+            }
             cmbTenKhu.Text = p.TenKhu;
             cmbLoaiPhong.Text = p.LoaiPhong;
-            nudSoGiuongToiDa.Value = p.SoGiuongToiDa;
-            nudSoGiuongTrong.Value = p.SoGiuongTrong;
+
+            isSyncingBeds = true;
+            numSoGiuongToiDa.Value = p.SoGiuongToiDa > 0 ? p.SoGiuongToiDa : 1;
+            int dangO = Math.Max(0, p.SoGiuongToiDa - p.SoGiuongTrong);
+            numSoNguoiHienTai.Maximum = numSoGiuongToiDa.Value;
+            numSoNguoiHienTai.Value = Math.Min(dangO, (int)numSoGiuongToiDa.Value);
+            numSoGiuongTrong.Value = Math.Max(0, p.SoGiuongTrong);
+            isSyncingBeds = false;
+
             txtDonGia.Text = p.DonGia.ToString("0");
+            cmbTrangThai.Text = string.IsNullOrWhiteSpace(p.TrangThai)
+                ? (p.SoGiuongTrong <= 0 ? "Đã đầy" : "Còn trống")
+                : p.TrangThai;
+
+            if (readOnlyMode)
+            {
+                this.Text = "Chi tiết thông tin Phòng - " + p.MaPhong;
+                lblFormTitle.Text = "CHI TIẾT PHÒNG: " + p.MaPhong;
+                lblFormSub.Text = "Chế độ xem thông tin chi tiết phòng và trạng thái lưu trú";
+
+                txtTenPhong.ReadOnly = true;
+                cmbTenKhu.Enabled = false;
+                cmbLoaiPhong.Enabled = false;
+                numSoGiuongToiDa.Enabled = false;
+                numSoNguoiHienTai.Enabled = false;
+                txtDonGia.ReadOnly = true;
+                cmbTrangThai.Enabled = false;
+
+                btnLuu.Visible = false;
+                btnHuy.Text = "Đóng";
+            }
+            else
+            {
+                this.Text = "Cập nhật thông tin Phòng - " + p.MaPhong;
+                lblFormTitle.Text = "CẬP NHẬT PHÒNG: " + p.MaPhong;
+                lblFormSub.Text = "Chỉnh sửa thông tin dãy nhà, sức chứa, đơn giá và trạng thái phòng";
+            }
         }
 
-        private void nudSoGiuongToiDa_ValueChanged(object sender, EventArgs e)
+        private void LoadDayNhaDropdown()
         {
-            // Khi thêm mới phòng, mặc định số giường trống bằng sức chứa tối đa
-            if (phongCurrent == null)
+            try
             {
-                nudSoGiuongTrong.Value = nudSoGiuongToiDa.Value;
+                cmbTenKhu.Items.Clear();
+                DataTable dt = phongBLL.GetAllDayNha();
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string tenKhu = row["TenKhu"].ToString();
+                        if (!string.IsNullOrWhiteSpace(tenKhu) && !cmbTenKhu.Items.Contains(tenKhu))
+                        {
+                            cmbTenKhu.Items.Add(tenKhu);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            if (cmbTenKhu.Items.Count == 0)
+            {
+                cmbTenKhu.Items.AddRange(new object[] { "Khu A", "Khu B", "Khu C", "Khu D" });
+            }
+        }
+
+        private void SyncBedsFromSucChuaAndDangO()
+        {
+            if (isSyncingBeds) return;
+            isSyncingBeds = true;
+            try
+            {
+                int sucChua = (int)numSoGiuongToiDa.Value;
+                numSoNguoiHienTai.Maximum = sucChua;
+                if (numSoNguoiHienTai.Value > sucChua)
+                {
+                    numSoNguoiHienTai.Value = sucChua;
+                }
+
+                int dangO = (int)numSoNguoiHienTai.Value;
+                int giuongTrong = Math.Max(0, sucChua - dangO);
+                numSoGiuongTrong.Maximum = sucChua;
+                numSoGiuongTrong.Value = giuongTrong;
+
+                if (cmbTrangThai.Text != "Bảo trì")
+                {
+                    cmbTrangThai.Text = giuongTrong <= 0 ? "Đã đầy" : "Còn trống";
+                }
+            }
+            finally
+            {
+                isSyncingBeds = false;
+            }
+        }
+
+        private void numSoGiuongToiDa_ValueChanged(object sender, EventArgs e)
+        {
+            SyncBedsFromSucChuaAndDangO();
+        }
+
+        private void numSoNguoiHienTai_ValueChanged(object sender, EventArgs e)
+        {
+            SyncBedsFromSucChuaAndDangO();
+        }
+
+        private void txtMaPhong_TextChanged(object sender, EventArgs e)
+        {
+            if (phongCurrent == null && (string.IsNullOrWhiteSpace(txtTenPhong.Text) || txtTenPhong.Text.StartsWith("Phòng ")))
+            {
+                txtTenPhong.Text = string.IsNullOrWhiteSpace(txtMaPhong.Text) ? "" : ("Phòng " + txtMaPhong.Text.Trim());
             }
         }
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
+            if (isReadOnly) return;
+
             try
             {
-                decimal donGia = 0;
-                if (!decimal.TryParse(txtDonGia.Text.Trim(), out donGia))
+                string rawGia = txtDonGia.Text.Trim().Replace(",", "").Replace(".", "");
+                decimal donGia;
+                if (!decimal.TryParse(rawGia, out donGia) || donGia <= 0)
                 {
-                    MessageBox.Show("Đơn giá phải là số hợp lệ!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vui lòng nhập Đơn giá phòng là số hợp lệ lớn hơn 0!", "Cảnh báo dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtDonGia.Focus();
                     return;
+                }
+
+                int sucChua = (int)numSoGiuongToiDa.Value;
+                int dangO = (int)numSoNguoiHienTai.Value;
+                int giuongTrong = Math.Max(0, sucChua - dangO);
+
+                string tenPhong = string.IsNullOrWhiteSpace(txtTenPhong.Text)
+                    ? ("Phòng " + txtMaPhong.Text.Trim())
+                    : txtTenPhong.Text.Trim();
+
+                string trangThai = cmbTrangThai.Text.Trim();
+                if (trangThai != "Bảo trì")
+                {
+                    trangThai = giuongTrong <= 0 ? "Đã đầy" : "Còn trống";
                 }
 
                 Phong p = new Phong(
                     txtMaPhong.Text.Trim(),
+                    tenPhong,
                     cmbTenKhu.Text.Trim(),
                     cmbLoaiPhong.Text.Trim(),
-                    (int)nudSoGiuongToiDa.Value,
-                    (int)nudSoGiuongTrong.Value,
-                    donGia
+                    sucChua,
+                    giuongTrong,
+                    donGia,
+                    trangThai
                 );
 
                 bool isSuccess = false;
 
                 if (phongCurrent == null)
                 {
-                    // Chế độ Thêm mới
                     isSuccess = phongBLL.InsertPhong(p);
                 }
                 else
                 {
-                    // Chế độ Cập nhật (Sửa)
                     isSuccess = phongBLL.UpdatePhong(p);
                 }
 
                 if (isSuccess)
                 {
-                    MessageBox.Show("Thao tác thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Lưu thông tin phòng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }

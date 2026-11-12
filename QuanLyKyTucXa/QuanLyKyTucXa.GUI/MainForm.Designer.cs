@@ -109,7 +109,7 @@ namespace QuanLyKyTucXa.GUI
             this.btnPhong.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
             this.btnPhong.Size = new System.Drawing.Size(232, 44);
             this.btnPhong.TabIndex = 3;
-            this.btnPhong.Text = "Quản lý Phòng && Dãy";
+            this.btnPhong.Text = "Quản lý Phòng và Dãy nhà";
             this.btnPhong.UseVisualStyleBackColor = true;
             this.btnPhong.Click += new System.EventHandler(this.btnPhong_Click);
             // 

@@ -140,7 +140,7 @@ namespace QuanLyKyTucXa.GUI
         private void btnPhong_Click(object sender, EventArgs e)
         {
             SetActiveButton(btnPhong);
-            LoadUserControl(new UCPhong(), "Quản lý Phòng & Dãy nhà");
+            LoadUserControl(new UCPhong(), "Quản lý Phòng và Dãy nhà");
         }
 
         private void btnDangXuat_Click(object sender, EventArgs e)

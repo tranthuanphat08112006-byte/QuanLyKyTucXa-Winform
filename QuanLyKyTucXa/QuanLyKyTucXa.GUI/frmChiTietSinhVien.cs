@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using QuanLyKyTucXa.DTO;
 using QuanLyKyTucXa.BLL;
@@ -9,19 +9,23 @@ namespace QuanLyKyTucXa.GUI
     {
         private SinhVienBLL svBLL = new SinhVienBLL();
         private SinhVien svCurrent = null; // Biến lưu sinh viên đang được sửa (null = Thêm mới)
+        private bool isReadOnly = false;
 
         // Constructor mặc định (Dùng cho Thêm mới)
         public frmChiTietSinhVien()
         {
             InitializeComponent();
             this.Text = "Thêm mới Sinh viên";
+            lblFormTitle.Text = "THÊM HỒ SƠ SINH VIÊN MỚI";
+            lblFormSub.Text = "Nhập đầy đủ thông tin cá nhân và giấy tờ định danh của sinh viên";
+            if (cmbGioiTinh.Items.Count > 0) cmbGioiTinh.SelectedIndex = 0;
         }
 
-        // Constructor overload (Dùng cho Chức năng Sửa - nhận đối tượng SinhVien từ UCSinhVien truyền sang)
-        public frmChiTietSinhVien(SinhVien sv) : this()
+        // Constructor overload (Dùng cho Chức năng Sửa hoặc Xem chi tiết)
+        public frmChiTietSinhVien(SinhVien sv, bool readOnlyMode = false) : this()
         {
             this.svCurrent = sv;
-            this.Text = "Cập nhật thông tin Sinh viên";
+            this.isReadOnly = readOnlyMode;
 
             // Đổ dữ liệu cũ lên các ô nhập liệu
             txtMaSV.Text = sv.MaSV;
@@ -31,10 +35,34 @@ namespace QuanLyKyTucXa.GUI
             txtCCCD.Text = sv.CCCD;
             txtSDT.Text = sv.SDT;
             cmbGioiTinh.Text = sv.GioiTinh;
+
+            if (readOnlyMode)
+            {
+                this.Text = "Chi tiết hồ sơ Sinh viên - " + sv.MaSV;
+                lblFormTitle.Text = "HỒ SƠ SINH VIÊN: " + sv.MaSV;
+                lblFormSub.Text = "Chế độ xem thông tin chi tiết hồ sơ sinh viên";
+
+                txtHoTen.ReadOnly = true;
+                dtpNgaySinh.Enabled = false;
+                cmbGioiTinh.Enabled = false;
+                txtCCCD.ReadOnly = true;
+                txtSDT.ReadOnly = true;
+
+                btnLuu.Visible = false;
+                btnHuy.Text = "Đóng";
+            }
+            else
+            {
+                this.Text = "Cập nhật thông tin Sinh viên - " + sv.MaSV;
+                lblFormTitle.Text = "CẬP NHẬT HỒ SƠ: " + sv.MaSV;
+                lblFormSub.Text = "Chỉnh sửa thông tin cá nhân và số liên lạc của sinh viên";
+            }
         }
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
+            if (isReadOnly) return;
+
             try
             {
                 SinhVien sv = new SinhVien(
@@ -61,14 +89,14 @@ namespace QuanLyKyTucXa.GUI
 
                 if (isSuccess)
                 {
-                    MessageBox.Show("Thao tác thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Lưu thông tin sinh viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Cảnh báo dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }
