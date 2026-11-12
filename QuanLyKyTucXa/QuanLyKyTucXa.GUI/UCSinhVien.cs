@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
-using QuanLyKyTucXa.BLL; // Nhận diện tầng BLL
+using QuanLyKyTucXa.BLL;
 using QuanLyKyTucXa.DTO;
+
 namespace QuanLyKyTucXa.GUI
 {
     public partial class UCSinhVien : UserControl
@@ -17,7 +19,11 @@ namespace QuanLyKyTucXa.GUI
         // Sự kiện khi form vừa mở lên
         private void UCSinhVien_Load(object sender, EventArgs e)
         {
-            // 1. Định dạng bảng cho đẹp (Hàm hôm trước đã viết)
+            // Bỏ qua load dữ liệu khi đang ở chế độ Designer của Visual Studio
+            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+                return;
+
+            // 1. Định dạng bảng cho đẹp
             UIHelper.FormatModernDataGridView(dgvSinhVien);
 
             // 2. Tải dữ liệu
@@ -29,23 +35,22 @@ namespace QuanLyKyTucXa.GUI
         {
             try
             {
-                // Gọi BLL và đổ dữ liệu thẳng vào bảng. Chỉ 1 dòng code duy nhất!
+                // Gọi BLL và đổ dữ liệu thẳng vào bảng
                 dgvSinhVien.DataSource = svBLL.GetAllSinhVien();
 
-                // Đổi lại tên cột hiển thị tiếng Việt cho thân thiện với người dùng
+                // Đổi lại tên cột hiển thị tiếng Việt an toàn
                 if (dgvSinhVien.Columns.Count > 0)
                 {
-                    dgvSinhVien.Columns["MaSV"].HeaderText = "Mã SV";
-                    dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                    dgvSinhVien.Columns["NgaySinh"].HeaderText = "Ngày Sinh";
-                    dgvSinhVien.Columns["CCCD"].HeaderText = "Số CCCD";
-                    dgvSinhVien.Columns["SDT"].HeaderText = "Điện Thoại";
-                    dgvSinhVien.Columns["GioiTinh"].HeaderText = "Giới Tính";
+                    if (dgvSinhVien.Columns.Contains("MaSV")) dgvSinhVien.Columns["MaSV"].HeaderText = "Mã SV";
+                    if (dgvSinhVien.Columns.Contains("HoTen")) dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                    if (dgvSinhVien.Columns.Contains("NgaySinh")) dgvSinhVien.Columns["NgaySinh"].HeaderText = "Ngày Sinh";
+                    if (dgvSinhVien.Columns.Contains("CCCD")) dgvSinhVien.Columns["CCCD"].HeaderText = "Số CCCD";
+                    if (dgvSinhVien.Columns.Contains("SDT")) dgvSinhVien.Columns["SDT"].HeaderText = "Điện Thoại";
+                    if (dgvSinhVien.Columns.Contains("GioiTinh")) dgvSinhVien.Columns["GioiTinh"].HeaderText = "Giới Tính";
                 }
             }
             catch (Exception ex)
             {
-                // Bọc try-catch để nếu SQL Server chưa bật, phần mềm sẽ báo lỗi lịch sự chứ không bị văng (crash)
                 MessageBox.Show("Lỗi kết nối cơ sở dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -55,49 +60,56 @@ namespace QuanLyKyTucXa.GUI
             frmChiTietSinhVien frm = new frmChiTietSinhVien();
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                // Thay vì hiển thị câu thông báo, giờ ta gọi lệnh tải lại danh sách
                 LoadDanhSachSinhVien();
             }
         }
+
         private void btn_Sua_Click(object sender, EventArgs e)
         {
             // Kiểm tra xem người dùng có đang chọn dòng nào trên bảng không
-            if (dgvSinhVien.SelectedRows.Count > 0)
+            if (dgvSinhVien.SelectedRows.Count > 0 || dgvSinhVien.CurrentRow != null)
             {
-                // Lấy dữ liệu từ dòng đang được chọn (không dùng e.RowIndex nữa)
-                DataGridViewRow row = dgvSinhVien.SelectedRows[0];
+                DataGridViewRow row = dgvSinhVien.SelectedRows.Count > 0 ? dgvSinhVien.SelectedRows[0] : dgvSinhVien.CurrentRow;
 
-                SinhVien svSelected = new SinhVien(
-                    row.Cells["MaSV"].Value.ToString(),
-                    row.Cells["HoTen"].Value.ToString(),
-                    Convert.ToDateTime(row.Cells["NgaySinh"].Value),
-                    row.Cells["CCCD"].Value.ToString(),
-                    row.Cells["SDT"].Value.ToString(),
-                    row.Cells["GioiTinh"].Value.ToString()
-                );
+                string maSV = row.Cells["MaSV"].Value?.ToString() ?? "";
+                string hoTen = row.Cells["HoTen"].Value?.ToString() ?? "";
+                DateTime ngaySinh = DateTime.Now;
+                if (row.Cells["NgaySinh"].Value != null && row.Cells["NgaySinh"].Value != DBNull.Value)
+                {
+                    DateTime.TryParse(row.Cells["NgaySinh"].Value.ToString(), out ngaySinh);
+                }
+                string cccd = row.Cells["CCCD"].Value?.ToString() ?? "";
+                string sdt = row.Cells["SDT"].Value?.ToString() ?? "";
+                string gioiTinh = row.Cells["GioiTinh"].Value?.ToString() ?? "Nam";
 
-                // Truyền đối tượng svSelected sang Form chi tiết
+                SinhVien svSelected = new SinhVien(maSV, hoTen, ngaySinh, cccd, sdt, gioiTinh);
+
                 frmChiTietSinhVien frm = new frmChiTietSinhVien(svSelected);
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
-                    LoadDanhSachSinhVien(); // Tải lại bảng sau khi Sửa thành công
+                    LoadDanhSachSinhVien();
                 }
             }
             else
             {
-                MessageBox.Show("Vui lòng chọn một sinh viên trên bảng để sửa!", "Thông báo");
+                MessageBox.Show("Vui lòng chọn một sinh viên trên bảng để sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void btn_Xoa_Click(object sender, EventArgs e)
         {
-            if (dgvSinhVien.SelectedRows.Count > 0)
+            if (dgvSinhVien.SelectedRows.Count > 0 || dgvSinhVien.CurrentRow != null)
             {
-                // Lấy Mã SV của dòng đang được chọn
-                string maSV = dgvSinhVien.SelectedRows[0].Cells["MaSV"].Value.ToString();
-                string hoTen = dgvSinhVien.SelectedRows[0].Cells["HoTen"].Value.ToString();
+                DataGridViewRow row = dgvSinhVien.SelectedRows.Count > 0 ? dgvSinhVien.SelectedRows[0] : dgvSinhVien.CurrentRow;
+                string maSV = row.Cells["MaSV"].Value?.ToString() ?? "";
+                string hoTen = row.Cells["HoTen"].Value?.ToString() ?? "";
 
-                // Hỏi xác nhận trước khi xóa
+                if (string.IsNullOrEmpty(maSV))
+                {
+                    MessageBox.Show("Vui lòng chọn dòng sinh viên hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 DialogResult confirm = MessageBox.Show(
                     $"Bạn có chắc chắn muốn xóa sinh viên {hoTen} ({maSV}) không?",
                     "Xác nhận xóa",
@@ -111,8 +123,8 @@ namespace QuanLyKyTucXa.GUI
                     {
                         if (svBLL.DeleteSinhVien(maSV))
                         {
-                            MessageBox.Show("Xóa sinh viên thành công!", "Thông báo");
-                            LoadDanhSachSinhVien(); // Tải lại bảng sau khi Xóa
+                            MessageBox.Show("Xóa sinh viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            LoadDanhSachSinhVien();
                         }
                     }
                     catch (Exception ex)
@@ -121,15 +133,10 @@ namespace QuanLyKyTucXa.GUI
                     }
                 }
             }
-                else
-                {
-                MessageBox.Show("Vui lòng chọn một sinh viên trên bảng để xóa!", "Thông báo");
+            else
+            {
+                MessageBox.Show("Vui lòng chọn một sinh viên trên bảng để xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void txtTimKiem_TextChanged(object sender, EventArgs e)
@@ -140,12 +147,10 @@ namespace QuanLyKyTucXa.GUI
 
                 if (string.IsNullOrWhiteSpace(keyword))
                 {
-                    // Nếu ô tìm kiếm trống, tải lại toàn bộ danh sách
                     LoadDanhSachSinhVien();
                 }
                 else
                 {
-                    // Nếu có từ khóa, gọi hàm tìm kiếm và đổ lại vào DataGridView
                     dgvSinhVien.DataSource = svBLL.SearchSinhVien(keyword);
                 }
             }

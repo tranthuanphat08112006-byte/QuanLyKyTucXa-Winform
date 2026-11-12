@@ -16,6 +16,9 @@ namespace QuanLyKyTucXa.GUI
 
         private void UCPhong_Load(object sender, EventArgs e)
         {
+            if (this.DesignMode || System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+                return;
+
             // 1. Định dạng bảng cho đẹp
             UIHelper.FormatModernDataGridView(dgvPhong);
 
