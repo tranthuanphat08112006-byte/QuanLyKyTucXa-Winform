@@ -85,6 +85,24 @@
     <Compile Include="frmChiTietPhong.Designer.cs">
       <DependentUpon>frmChiTietPhong.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmChuyenPhong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChuyenPhong.Designer.cs">
+      <DependentUpon>frmChuyenPhong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmLapHopDong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLapHopDong.Designer.cs">
+      <DependentUpon>frmLapHopDong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCHopDong.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCHopDong.Designer.cs">
+      <DependentUpon>UCHopDong.cs</DependentUpon>
+    </Compile>
     <Compile Include="UCPhong.cs">
       <SubType>UserControl</SubType>
     </Compile>

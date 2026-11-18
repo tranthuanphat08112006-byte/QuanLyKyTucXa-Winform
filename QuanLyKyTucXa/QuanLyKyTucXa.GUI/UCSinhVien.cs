@@ -34,7 +34,7 @@ namespace QuanLyKyTucXa.GUI
             RefreshAllData();
         }
 
-        private void RefreshAllData()
+        public void RefreshAllData()
         {
             LoadDanhSachSinhVien();
             UpdateSummaryCards();
@@ -107,6 +107,16 @@ namespace QuanLyKyTucXa.GUI
                         dgvSinhVien.Columns["CCCD"].HeaderText = "Số CCCD / CMND";
                     if (dgvSinhVien.Columns.Contains("SDT"))
                         dgvSinhVien.Columns["SDT"].HeaderText = "Số Điện Thoại";
+                    if (dgvSinhVien.Columns.Contains("TenPhong"))
+                    {
+                        dgvSinhVien.Columns["TenPhong"].HeaderText = "Phòng";
+                        dgvSinhVien.Columns["TenPhong"].FillWeight = 75;
+                    }
+                    if (dgvSinhVien.Columns.Contains("TrangThai"))
+                    {
+                        dgvSinhVien.Columns["TrangThai"].HeaderText = "Trạng Thái";
+                        dgvSinhVien.Columns["TrangThai"].FillWeight = 110;
+                    }
                 }
             }
             catch (Exception ex)
@@ -249,6 +259,15 @@ namespace QuanLyKyTucXa.GUI
                 {
                     e.CellStyle.ForeColor = Color.FromArgb(13, 148, 136);
                 }
+            }
+
+            if (dgvSinhVien.Columns[e.ColumnIndex].Name == "TrangThai" && e.Value != null)
+            {
+                string trangThai = e.Value.ToString();
+                e.CellStyle.Font = new Font(dgvSinhVien.Font, FontStyle.Bold);
+                e.CellStyle.ForeColor = (trangThai == "Đang lưu trú")
+                    ? Color.FromArgb(22, 163, 74)   // Xanh lá
+                    : Color.FromArgb(234, 88, 12);  // Cam cảnh báo
             }
         }
 

@@ -244,6 +244,30 @@ namespace QuanLyKyTucXa.GUI
             return bmp;
         }
 
+        public static Bitmap CreateContractIcon(Color color, int size = 20)
+        {
+            Bitmap bmp = new Bitmap(size, size);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                using (SolidBrush brush = new SolidBrush(color))
+                using (Pen pen = new Pen(color, Math.Max(1.6f, size * 0.08f)))
+                {
+                    // Khung tài liệu hợp đồng
+                    g.DrawRectangle(pen, size * 0.18f, size * 0.10f, size * 0.64f, size * 0.80f);
+
+                    // Các dòng nội dung
+                    g.DrawLine(pen, size * 0.30f, size * 0.32f, size * 0.70f, size * 0.32f);
+                    g.DrawLine(pen, size * 0.30f, size * 0.50f, size * 0.70f, size * 0.50f);
+                    g.DrawLine(pen, size * 0.30f, size * 0.68f, size * 0.54f, size * 0.68f);
+
+                    // Dấu tích / chữ ký nhỏ góc dưới phải
+                    g.FillEllipse(brush, size * 0.60f, size * 0.64f, size * 0.14f, size * 0.14f);
+                }
+            }
+            return bmp;
+        }
+
         public static Bitmap CreateLogoutIcon(Color color, int size = 20)
         {
             Bitmap bmp = new Bitmap(size, size);

@@ -12,7 +12,23 @@ namespace QuanLyKyTucXa.DAL
 
         public DataTable GetAllSinhVien()
         {
-            string query = "SELECT MaSV, HoTen, NgaySinh, CCCD, SDT, GioiTinh FROM SinhVien ORDER BY MaSV";
+            string query = @"
+                        SELECT 
+                            sv.MaSV, 
+                            sv.HoTen, 
+                            sv.NgaySinh, 
+                            sv.CCCD, 
+                            sv.SDT, 
+                            sv.GioiTinh,
+                            ISNULL(p.TenPhong, N'Chưa xếp') AS TenPhong,
+                            CASE 
+                                WHEN hd.MaHopDong IS NOT NULL THEN N'Đang lưu trú'
+                                ELSE N'Chưa xếp phòng'
+                            END AS TrangThai
+                        FROM SinhVien sv
+                        LEFT JOIN HopDong hd ON sv.MaSV = hd.MaSV AND hd.TrangThai = N'Đang hiệu lực'
+                        LEFT JOIN Phong p ON hd.MaPhong = p.MaPhong
+                        ORDER BY sv.MaSV";
             return dbHelper.ExecuteQuery(query);
         }
 
@@ -23,18 +39,34 @@ namespace QuanLyKyTucXa.DAL
 
             if (!string.IsNullOrWhiteSpace(keyword))
             {
-                conditions.Add("(MaSV LIKE @Keyword OR HoTen LIKE @Keyword OR CCCD LIKE @Keyword OR SDT LIKE @Keyword)");
+                conditions.Add("(sv.MaSV LIKE @Keyword OR sv.HoTen LIKE @Keyword OR sv.CCCD LIKE @Keyword OR sv.SDT LIKE @Keyword)");
                 parameters.Add(new SqlParameter("@Keyword", "%" + keyword.Trim() + "%"));
             }
 
             if (!string.IsNullOrWhiteSpace(gioiTinh) && gioiTinh != "Tất cả giới tính")
             {
-                conditions.Add("GioiTinh = @GioiTinh");
+                conditions.Add("sv.GioiTinh = @GioiTinh");
                 parameters.Add(new SqlParameter("@GioiTinh", gioiTinh.Trim()));
             }
 
             string whereClause = conditions.Count > 0 ? (" WHERE " + string.Join(" AND ", conditions)) : "";
-            string query = "SELECT MaSV, HoTen, NgaySinh, CCCD, SDT, GioiTinh FROM SinhVien" + whereClause + " ORDER BY MaSV";
+            string query = @"
+                SELECT 
+                    sv.MaSV, 
+                    sv.HoTen, 
+                    sv.NgaySinh, 
+                    sv.CCCD, 
+                    sv.SDT, 
+                    sv.GioiTinh,
+                    ISNULL(p.TenPhong, N'Chưa xếp') AS TenPhong,
+                    CASE 
+                        WHEN hd.MaHopDong IS NOT NULL THEN N'Đang lưu trú'
+                        ELSE N'Chưa xếp phòng'
+                    END AS TrangThai
+                FROM SinhVien sv
+                LEFT JOIN HopDong hd ON sv.MaSV = hd.MaSV AND hd.TrangThai = N'Đang hiệu lực'
+                LEFT JOIN Phong p ON hd.MaPhong = p.MaPhong"
+                + whereClause + " ORDER BY sv.MaSV";
 
             return dbHelper.ExecuteQuery(query, parameters.ToArray());
         }
@@ -148,8 +180,24 @@ namespace QuanLyKyTucXa.DAL
 
         public DataTable SearchSinhVien(string keyword)
         {
-            string query = "SELECT MaSV, HoTen, NgaySinh, CCCD, SDT, GioiTinh FROM SinhVien " +
-                           "WHERE MaSV LIKE @Keyword OR HoTen LIKE @Keyword OR CCCD LIKE @Keyword OR SDT LIKE @Keyword ORDER BY MaSV";
+            string query = @"
+                SELECT 
+                    sv.MaSV, 
+                    sv.HoTen, 
+                    sv.NgaySinh, 
+                    sv.CCCD, 
+                    sv.SDT, 
+                    sv.GioiTinh,
+                    ISNULL(p.TenPhong, N'Chưa xếp') AS TenPhong,
+                    CASE 
+                        WHEN hd.MaHopDong IS NOT NULL THEN N'Đang lưu trú'
+                        ELSE N'Chưa xếp phòng'
+                    END AS TrangThai
+                FROM SinhVien sv
+                LEFT JOIN HopDong hd ON sv.MaSV = hd.MaSV AND hd.TrangThai = N'Đang hiệu lực'
+                LEFT JOIN Phong p ON hd.MaPhong = p.MaPhong
+                WHERE sv.MaSV LIKE @Keyword OR sv.HoTen LIKE @Keyword OR sv.CCCD LIKE @Keyword OR sv.SDT LIKE @Keyword 
+                ORDER BY sv.MaSV";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -160,3 +208,4 @@ namespace QuanLyKyTucXa.DAL
         }
     }
 }
+    

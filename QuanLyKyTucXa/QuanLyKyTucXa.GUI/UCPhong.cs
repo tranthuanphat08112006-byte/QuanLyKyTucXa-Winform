@@ -36,7 +36,7 @@ namespace QuanLyKyTucXa.GUI
             RefreshAllData();
         }
 
-        private void RefreshAllData()
+        public void RefreshAllData()
         {
             LoadFilterDayNhaOptions();
             LoadDanhSachPhong();

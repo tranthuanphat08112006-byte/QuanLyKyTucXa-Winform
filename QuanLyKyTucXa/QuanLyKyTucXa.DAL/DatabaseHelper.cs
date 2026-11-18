@@ -9,6 +9,8 @@ namespace QuanLyKyTucXa.DAL
     {
         private string connectionString;
 
+        public string ConnectionString => connectionString;
+
         public DatabaseHelper()
         {
             try

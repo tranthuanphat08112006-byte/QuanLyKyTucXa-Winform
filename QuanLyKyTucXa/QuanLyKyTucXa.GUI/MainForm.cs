@@ -14,6 +14,9 @@ namespace QuanLyKyTucXa.GUI
         private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
 
         private Form activeForm = null;
+        private UCSinhVien ucSinhVien;
+        private UCPhong ucPhong;
+        private UCHopDong ucHopDong;
 
         public MainForm()
         {
@@ -28,15 +31,12 @@ namespace QuanLyKyTucXa.GUI
         /// </summary>
         private void SetupCustomIcons()
         {
-            // Logo trường / ký túc xá
             this.picLogo.Image = IconHelper.CreateDormLogoIcon(Color.FromArgb(96, 165, 250), 30);
-
-            // Avatar người dùng góc dưới
             this.picAvatar.Image = IconHelper.CreateUserAvatarIcon(Color.FromArgb(37, 99, 235), Color.White, 36);
 
-            // Icon trên từng nút menu
             this.btnSinhVien.Image = IconHelper.CreateStudentIcon(Color.White, 20);
             this.btnPhong.Image = IconHelper.CreateRoomIcon(Color.FromArgb(203, 213, 225), 20);
+            this.btnHopDong.Image = IconHelper.CreateContractIcon(Color.FromArgb(203, 213, 225), 20);
             this.btnDangXuat.Image = IconHelper.CreateLogoutIcon(Color.FromArgb(248, 113, 113), 18);
         }
 
@@ -85,16 +85,11 @@ namespace QuanLyKyTucXa.GUI
         }
 
         /// <summary>
-        /// Mở UserControl vào pnlContainer nếu cần sử dụng trực tiếp UserControl
+        /// Nạp UserControl vào pnlContainer và tự động làm mới dữ liệu khi chuyển qua lại
         /// </summary>
         public void LoadUserControl(UserControl uc, string pageTitle = "")
         {
-            if (pnlContainer.Controls.Count > 0)
-            {
-                pnlContainer.Controls[0].Dispose();
-                pnlContainer.Controls.Clear();
-            }
-
+            pnlContainer.Controls.Clear();
             uc.Dock = DockStyle.Fill;
             pnlContainer.Controls.Add(uc);
 
@@ -107,40 +102,64 @@ namespace QuanLyKyTucXa.GUI
         }
 
         /// <summary>
-        /// Chuyển đổi trạng thái Active/Inactive cho các nút menu bo tròn
+        /// Chuyển đổi trạng thái Active/Inactive cho 3 nút menu chính
         /// </summary>
         private void SetActiveButton(ModernMenuButton selectedBtn)
         {
-            // Đưa nút Sinh viên về trạng thái thường
+            Color inactiveColor = Color.FromArgb(203, 213, 225);
+
             btnSinhVien.IsActive = false;
-            btnSinhVien.Image = IconHelper.CreateStudentIcon(Color.FromArgb(203, 213, 225), 20);
+            btnSinhVien.Image = IconHelper.CreateStudentIcon(inactiveColor, 20);
 
-            // Đưa nút Phòng về trạng thái thường
             btnPhong.IsActive = false;
-            btnPhong.Image = IconHelper.CreateRoomIcon(Color.FromArgb(203, 213, 225), 20);
+            btnPhong.Image = IconHelper.CreateRoomIcon(inactiveColor, 20);
 
-            // Bật sáng nút được chọn (Active)
+            btnHopDong.IsActive = false;
+            btnHopDong.Image = IconHelper.CreateContractIcon(inactiveColor, 20);
+
             selectedBtn.IsActive = true;
             if (selectedBtn == btnSinhVien)
-            {
                 btnSinhVien.Image = IconHelper.CreateStudentIcon(Color.White, 20);
-            }
             else if (selectedBtn == btnPhong)
-            {
                 btnPhong.Image = IconHelper.CreateRoomIcon(Color.White, 20);
-            }
+            else if (selectedBtn == btnHopDong)
+                btnHopDong.Image = IconHelper.CreateContractIcon(Color.White, 20);
         }
 
         private void btnSinhVien_Click(object sender, EventArgs e)
         {
             SetActiveButton(btnSinhVien);
-            LoadUserControl(new UCSinhVien(), "Quản lý Sinh viên");
+            bool isFirstLoad = ucSinhVien == null;
+            if (isFirstLoad) ucSinhVien = new UCSinhVien();
+
+            LoadUserControl(ucSinhVien, "Quản lý Sinh viên");
+
+            // Tự động làm mới dữ liệu khi chuyển từ màn hình khác quay lại
+            if (!isFirstLoad) ucSinhVien.RefreshAllData();
         }
 
         private void btnPhong_Click(object sender, EventArgs e)
         {
             SetActiveButton(btnPhong);
-            LoadUserControl(new UCPhong(), "Quản lý Phòng và Dãy nhà");
+            bool isFirstLoad = ucPhong == null;
+            if (isFirstLoad) ucPhong = new UCPhong();
+
+            LoadUserControl(ucPhong, "Quản lý Phòng và Dãy nhà");
+
+            // Tự động làm mới dữ liệu khi chuyển từ màn hình khác quay lại
+            if (!isFirstLoad) ucPhong.RefreshAllData();
+        }
+
+        private void btnHopDong_Click(object sender, EventArgs e)
+        {
+            SetActiveButton(btnHopDong);
+            bool isFirstLoad = ucHopDong == null;
+            if (isFirstLoad) ucHopDong = new UCHopDong();
+
+            LoadUserControl(ucHopDong, "Quản lý Hợp đồng");
+
+            // Tự động làm mới dữ liệu khi chuyển từ màn hình khác quay lại
+            if (!isFirstLoad) ucHopDong.RefreshAllData();
         }
 
         private void btnDangXuat_Click(object sender, EventArgs e)

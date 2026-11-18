@@ -30,6 +30,8 @@ namespace QuanLyKyTucXa.GUI
         {
             this.pnlMenu = new System.Windows.Forms.Panel();
             this.pnlNavList = new System.Windows.Forms.Panel();
+            this.btnHopDong = new QuanLyKyTucXa.GUI.ModernMenuButton();
+            this.pnlSpacer3 = new System.Windows.Forms.Panel();
             this.btnPhong = new QuanLyKyTucXa.GUI.ModernMenuButton();
             this.pnlSpacer2 = new System.Windows.Forms.Panel();
             this.btnSinhVien = new QuanLyKyTucXa.GUI.ModernMenuButton();
@@ -77,6 +79,8 @@ namespace QuanLyKyTucXa.GUI
             // pnlNavList
             // 
             this.pnlNavList.BackColor = System.Drawing.Color.Transparent;
+            this.pnlNavList.Controls.Add(this.btnHopDong);
+            this.pnlNavList.Controls.Add(this.pnlSpacer3);
             this.pnlNavList.Controls.Add(this.btnPhong);
             this.pnlNavList.Controls.Add(this.pnlSpacer2);
             this.pnlNavList.Controls.Add(this.btnSinhVien);
@@ -88,6 +92,38 @@ namespace QuanLyKyTucXa.GUI
             this.pnlNavList.Padding = new System.Windows.Forms.Padding(14, 12, 14, 10);
             this.pnlNavList.Size = new System.Drawing.Size(260, 580);
             this.pnlNavList.TabIndex = 1;
+            // 
+            // btnHopDong
+            // 
+            this.btnHopDong.ActiveBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.btnHopDong.ActiveForeColor = System.Drawing.Color.White;
+            this.btnHopDong.BorderRadius = 10;
+            this.btnHopDong.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnHopDong.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnHopDong.FlatAppearance.BorderSize = 0;
+            this.btnHopDong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHopDong.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnHopDong.HoverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(45)))), ((int)(((byte)(75)))));
+            this.btnHopDong.HoverForeColor = System.Drawing.Color.White;
+            this.btnHopDong.IsActive = false;
+            this.btnHopDong.Location = new System.Drawing.Point(14, 172);
+            this.btnHopDong.Name = "btnHopDong";
+            this.btnHopDong.NormalBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(38)))), ((int)(((byte)(66)))));
+            this.btnHopDong.NormalForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
+            this.btnHopDong.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
+            this.btnHopDong.Size = new System.Drawing.Size(232, 44);
+            this.btnHopDong.TabIndex = 5;
+            this.btnHopDong.Text = "Quản lý Hợp đồng";
+            this.btnHopDong.UseVisualStyleBackColor = true;
+            this.btnHopDong.Click += new System.EventHandler(this.btnHopDong_Click);
+            // 
+            // pnlSpacer3
+            // 
+            this.pnlSpacer3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSpacer3.Location = new System.Drawing.Point(14, 164);
+            this.pnlSpacer3.Name = "pnlSpacer3";
+            this.pnlSpacer3.Size = new System.Drawing.Size(232, 8);
+            this.pnlSpacer3.TabIndex = 4;
             // 
             // btnPhong
             // 
@@ -422,8 +458,10 @@ namespace QuanLyKyTucXa.GUI
         private System.Windows.Forms.Label lblMenuCategory;
         private System.Windows.Forms.Panel pnlSpacer1;
         private System.Windows.Forms.Panel pnlSpacer2;
+        private System.Windows.Forms.Panel pnlSpacer3;
         private QuanLyKyTucXa.GUI.ModernMenuButton btnSinhVien;
         private QuanLyKyTucXa.GUI.ModernMenuButton btnPhong;
+        private QuanLyKyTucXa.GUI.ModernMenuButton btnHopDong;
         private System.Windows.Forms.Panel pnlUserSection;
         private System.Windows.Forms.Panel pnlUserDivider;
         private System.Windows.Forms.Panel pnlUserInfo;

@@ -14,6 +14,8 @@ namespace QuanLyKyTucXa.DTO
         public string CCCD { get; set; }
         public string SDT { get; set; }
         public string GioiTinh { get; set; }
+        public string TenPhong { get; set; }
+        public string TrangThai { get; set; }
 
         public SinhVien() { }
 
