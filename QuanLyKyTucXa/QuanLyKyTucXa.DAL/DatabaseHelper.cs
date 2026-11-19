@@ -7,8 +7,29 @@ namespace QuanLyKyTucXa.DAL
 {
     public class DatabaseHelper
     {
-        // Tự động lấy chuỗi kết nối có tên "ConnStr" từ App.config
-        private string connectionString = ConfigurationManager.ConnectionStrings["ConnStr"].ConnectionString;
+        private string connectionString;
+
+        public string ConnectionString => connectionString;
+
+        public DatabaseHelper()
+        {
+            try
+            {
+                var connSetting = ConfigurationManager.ConnectionStrings["ConnStr"];
+                if (connSetting != null && !string.IsNullOrEmpty(connSetting.ConnectionString))
+                {
+                    connectionString = connSetting.ConnectionString;
+                }
+                else
+                {
+                    connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
+                }
+            }
+            catch
+            {
+                connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
+            }
+        }
 
         // Hàm 1: Dành cho các câu lệnh SELECT (Lấy dữ liệu trả về DataTable)
         public DataTable ExecuteQuery(string query, SqlParameter[] parameters = null)
@@ -58,11 +79,37 @@ namespace QuanLyKyTucXa.DAL
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("Lỗi thao tác dữ liệu: " + ex.Message);
+                        throw new Exception("Lỗi thực thi lệnh dữ liệu: " + ex.Message);
                     }
                 }
             }
             return affectedRows;
+        }
+
+        // Hàm 3: Lấy giá trị đơn (SELECT COUNT, SCOPE_IDENTITY, ...)
+        public object ExecuteScalar(string query, SqlParameter[] parameters = null)
+        {
+            object result = null;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    if (parameters != null)
+                    {
+                        cmd.Parameters.AddRange(parameters);
+                    }
+                    try
+                    {
+                        conn.Open();
+                        result = cmd.ExecuteScalar();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Lỗi truy vấn giá trị: " + ex.Message);
+                    }
+                }
+            }
+            return result;
         }
     }
 }
