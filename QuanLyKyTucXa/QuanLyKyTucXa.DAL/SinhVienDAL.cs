@@ -10,6 +10,15 @@ namespace QuanLyKyTucXa.DAL
     {
         private DatabaseHelper dbHelper = new DatabaseHelper();
 
+        public SinhVienDAL()
+        {
+            try
+            {
+                new PhongDAL();
+            }
+            catch { }
+        }
+
         public DataTable GetAllSinhVien()
         {
             string query = @"
