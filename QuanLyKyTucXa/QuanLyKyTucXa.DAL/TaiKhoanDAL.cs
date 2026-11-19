@@ -36,7 +36,21 @@ BEGIN
     ('SinhVien', N'Sinh viên', N'Tra cứu thông tin cá nhân và hợp đồng');
 END
 
--- 2. Cập nhật Check Constraint trên TaiKhoan nếu chưa cho phép NhanVien
+-- 2. Bảng Tài Khoản (Khởi tạo nếu chưa tồn tại trên CSDL mới)
+IF OBJECT_ID('TaiKhoan', 'U') IS NULL
+BEGIN
+    CREATE TABLE TaiKhoan (
+        MaTaiKhoan INT IDENTITY(1,1) PRIMARY KEY,
+        TenDangNhap VARCHAR(50) NOT NULL UNIQUE,
+        MatKhau VARCHAR(255) NOT NULL,
+        HoTen NVARCHAR(100) NULL,
+        VaiTro NVARCHAR(20) NOT NULL DEFAULT 'NhanVien',
+        TrangThai BIT NOT NULL DEFAULT 1,
+        NgayTao DATETIME NOT NULL DEFAULT GETDATE()
+    );
+END
+
+-- 3. Cập nhật Check Constraint trên TaiKhoan nếu chưa cho phép NhanVien
 IF EXISTS (SELECT * FROM sys.check_constraints WHERE name = 'CK_TaiKhoan_VaiTro')
 BEGIN
     ALTER TABLE TaiKhoan DROP CONSTRAINT CK_TaiKhoan_VaiTro;
@@ -45,7 +59,7 @@ END
 ALTER TABLE TaiKhoan ADD CONSTRAINT CK_TaiKhoan_VaiTro 
     CHECK (VaiTro IN ('Admin', 'NhanVien', 'SinhVien'));
 
--- 3. Khởi tạo tài khoản Admin mặc định nếu bảng TaiKhoan đang trống (Mật khẩu: Admin@123)
+-- 4. Khởi tạo tài khoản Admin mặc định nếu bảng TaiKhoan đang trống (Mật khẩu: Admin@123)
 IF NOT EXISTS (SELECT 1 FROM TaiKhoan WHERE VaiTro = 'Admin')
 BEGIN
     INSERT INTO TaiKhoan (TenDangNhap, MatKhau, HoTen, VaiTro, TrangThai, NgayTao)
