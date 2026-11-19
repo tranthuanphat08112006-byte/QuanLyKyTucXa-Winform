@@ -139,11 +139,38 @@
     <Compile Include="UCDichVuTaiChinh.Designer.cs">
       <DependentUpon>UCDichVuTaiChinh.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmDangNhap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDangNhap.Designer.cs">
+      <DependentUpon>frmDangNhap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmChiTietTaiKhoan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChiTietTaiKhoan.Designer.cs">
+      <DependentUpon>frmChiTietTaiKhoan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDoiMatKhau.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDoiMatKhau.Designer.cs">
+      <DependentUpon>frmDoiMatKhau.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCTaiKhoan.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCTaiKhoan.Designer.cs">
+      <DependentUpon>UCTaiKhoan.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="frmChiTietDayNha.resx">
       <DependentUpon>frmChiTietDayNha.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmChiTietPhong.resx">
       <DependentUpon>frmChiTietPhong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCHopDong.resx">
+      <DependentUpon>UCHopDong.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UCPhong.resx">
       <DependentUpon>UCPhong.cs</DependentUpon>

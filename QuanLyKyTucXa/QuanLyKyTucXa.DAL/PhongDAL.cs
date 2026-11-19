@@ -38,7 +38,7 @@ END";
 IF COL_LENGTH('Phong', 'TenPhong') IS NULL
 BEGIN
     ALTER TABLE Phong ADD TenPhong NVARCHAR(100) NULL;
-    EXEC('UPDATE Phong SET TenPhong = N''Phòng '' + MaPhong WHERE TenPhong IS NULL');
+    EXEC('UPDATE Phong SET TenPhong = CONCAT(N''Phòng '', MaPhong) WHERE TenPhong IS NULL');
 END
 
 IF COL_LENGTH('Phong', 'TrangThaiPhong') IS NULL

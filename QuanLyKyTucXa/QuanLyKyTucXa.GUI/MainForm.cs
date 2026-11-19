@@ -18,6 +18,7 @@ namespace QuanLyKyTucXa.GUI
         private UCPhong ucPhong;
         private UCHopDong ucHopDong;
         private UCDichVuTaiChinh ucDichVuTaiChinh;
+        private UCTaiKhoan ucTaiKhoan;
 
         public MainForm()
         {
@@ -25,6 +26,16 @@ namespace QuanLyKyTucXa.GUI
             SetupCustomIcons();
             this.pnlHeader.MouseDown += PnlHeader_MouseDown;
             this.lblHeaderTitle.MouseDown += PnlHeader_MouseDown;
+
+            // Đăng ký sự kiện nhấp vào hồ sơ để đổi mật khẩu cá nhân
+            this.pnlUserInfo.Cursor = Cursors.Hand;
+            this.picAvatar.Cursor = Cursors.Hand;
+            this.lblUserName.Cursor = Cursors.Hand;
+            this.lblUserRole.Cursor = Cursors.Hand;
+            this.pnlUserInfo.Click += PnlUserInfo_Click;
+            this.picAvatar.Click += PnlUserInfo_Click;
+            this.lblUserName.Click += PnlUserInfo_Click;
+            this.lblUserRole.Click += PnlUserInfo_Click;
         }
 
         /// <summary>
@@ -39,11 +50,27 @@ namespace QuanLyKyTucXa.GUI
             this.btnPhong.Image = IconHelper.CreateRoomIcon(Color.FromArgb(203, 213, 225), 20);
             this.btnHopDong.Image = IconHelper.CreateContractIcon(Color.FromArgb(203, 213, 225), 20);
             this.btnDichVuTaiChinh.Image = IconHelper.CreateFinanceIcon(Color.FromArgb(203, 213, 225), 20);
+            this.btnTaiKhoan.Image = IconHelper.CreateAccountIcon(Color.FromArgb(203, 213, 225), 20);
+            this.btnDoiMatKhau.Image = IconHelper.CreateKeyIcon(Color.FromArgb(203, 213, 225), 18);
             this.btnDangXuat.Image = IconHelper.CreateLogoutIcon(Color.FromArgb(248, 113, 113), 18);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            // Hiển thị thông tin người dùng đang đăng nhập
+            if (QuanLyKyTucXa.DTO.UserSession.IsLoggedIn)
+            {
+                this.lblUserName.Text = QuanLyKyTucXa.DTO.UserSession.CurrentUser.HoTen;
+                this.lblUserRole.Text = "● Vai trò: " + QuanLyKyTucXa.DTO.UserSession.CurrentUser.VaiTroHienThi;
+            }
+
+            // Phân quyền giao diện: Chỉ Admin mới thấy Quản lý tài khoản
+            if (!QuanLyKyTucXa.DTO.UserSession.IsAdmin)
+            {
+                this.btnTaiKhoan.Visible = false;
+                this.pnlSpacer5.Visible = false;
+            }
+
             // Mở mặc định màn hình Quản lý Sinh viên
             btnSinhVien_Click(this.btnSinhVien, EventArgs.Empty);
         }
@@ -104,7 +131,7 @@ namespace QuanLyKyTucXa.GUI
         }
 
         /// <summary>
-        /// Chuyển đổi trạng thái Active/Inactive cho 3 nút menu chính
+        /// Chuyển đổi trạng thái Active/Inactive cho các nút menu chính
         /// </summary>
         private void SetActiveButton(ModernMenuButton selectedBtn)
         {
@@ -122,6 +149,9 @@ namespace QuanLyKyTucXa.GUI
             btnDichVuTaiChinh.IsActive = false;
             btnDichVuTaiChinh.Image = IconHelper.CreateFinanceIcon(inactiveColor, 20);
 
+            btnTaiKhoan.IsActive = false;
+            btnTaiKhoan.Image = IconHelper.CreateAccountIcon(inactiveColor, 20);
+
             selectedBtn.IsActive = true;
             if (selectedBtn == btnSinhVien)
                 btnSinhVien.Image = IconHelper.CreateStudentIcon(Color.White, 20);
@@ -131,6 +161,8 @@ namespace QuanLyKyTucXa.GUI
                 btnHopDong.Image = IconHelper.CreateContractIcon(Color.White, 20);
             else if (selectedBtn == btnDichVuTaiChinh)
                 btnDichVuTaiChinh.Image = IconHelper.CreateFinanceIcon(Color.White, 20);
+            else if (selectedBtn == btnTaiKhoan)
+                btnTaiKhoan.Image = IconHelper.CreateAccountIcon(Color.White, 20);
         }
 
         private void btnSinhVien_Click(object sender, EventArgs e)
@@ -181,6 +213,40 @@ namespace QuanLyKyTucXa.GUI
             if (!isFirstLoad) ucDichVuTaiChinh.RefreshAllData();
         }
 
+        private void btnTaiKhoan_Click(object sender, EventArgs e)
+        {
+            // Kiểm tra quyền nghiệp vụ
+            if (!QuanLyKyTucXa.DTO.UserSession.IsAdmin)
+            {
+                MessageBox.Show("Bạn không có quyền truy cập module Quản lý tài khoản!", "Từ chối truy cập", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SetActiveButton(btnTaiKhoan);
+            bool isFirstLoad = ucTaiKhoan == null;
+            if (isFirstLoad) ucTaiKhoan = new UCTaiKhoan();
+
+            LoadUserControl(ucTaiKhoan, "Quản lý Tài khoản & Phân quyền");
+
+            if (!isFirstLoad) ucTaiKhoan.RefreshAllData();
+        }
+
+        private void btnDoiMatKhau_Click(object sender, EventArgs e)
+        {
+            using (frmDoiMatKhau frm = new frmDoiMatKhau())
+            {
+                frm.ShowDialog();
+            }
+        }
+
+        private void PnlUserInfo_Click(object sender, EventArgs e)
+        {
+            using (frmDoiMatKhau frm = new frmDoiMatKhau())
+            {
+                frm.ShowDialog();
+            }
+        }
+
         private void btnDangXuat_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(
@@ -192,6 +258,8 @@ namespace QuanLyKyTucXa.GUI
 
             if (result == DialogResult.Yes)
             {
+                QuanLyKyTucXa.DTO.UserSession.Logout();
+                this.DialogResult = DialogResult.Retry; // Báo hiệu cho Program.cs hiển thị lại form Đăng nhập
                 this.Close();
             }
         }

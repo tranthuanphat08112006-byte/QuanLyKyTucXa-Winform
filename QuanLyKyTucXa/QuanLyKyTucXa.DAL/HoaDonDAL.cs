@@ -358,7 +358,7 @@ WHERE MaHoaDon = @MaHoaDon";
         public DataRow GetThongTinPhongChoHoaDon(string maPhong)
         {
             string query = @"
-SELECT MaPhong, ISNULL(TenPhong, N'Phòng ' + MaPhong) AS TenPhong, TenKhu, LoaiPhong, DonGia
+SELECT MaPhong, ISNULL(TenPhong, CONCAT(N'Phòng ', MaPhong)) AS TenPhong, TenKhu, LoaiPhong, DonGia
 FROM Phong
 WHERE MaPhong = @MaPhong";
 

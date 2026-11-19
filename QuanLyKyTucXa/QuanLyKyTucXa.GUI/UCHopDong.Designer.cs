@@ -125,7 +125,8 @@ namespace QuanLyKyTucXa.GUI
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Size = new System.Drawing.Size(694, 36);
             this.lblSubtitle.TabIndex = 1;
-            this.lblSubtitle.Text = "Theo dõi hợp đồng thuê phòng, chuyển phòng và thanh lý hợp đồng lưu trú ký túc xá";
+            this.lblSubtitle.Text = "Theo dõi hợp đồng thuê phòng, chuyển phòng và thanh lý hợp đồng lưu trú ký túc xá" +
+    "";
             // 
             // lblTitle
             // 
@@ -591,7 +592,7 @@ namespace QuanLyKyTucXa.GUI
             this.lblLocTrangThai.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
             this.lblLocTrangThai.Location = new System.Drawing.Point(0, 8);
             this.lblLocTrangThai.Name = "lblLocTrangThai";
-            this.lblLocTrangThai.Size = new System.Drawing.Size(66, 15);
+            this.lblLocTrangThai.Size = new System.Drawing.Size(63, 15);
             this.lblLocTrangThai.TabIndex = 2;
             this.lblLocTrangThai.Text = "Trạng thái:";
             // 
@@ -702,6 +703,7 @@ namespace QuanLyKyTucXa.GUI
             this.flpActions.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

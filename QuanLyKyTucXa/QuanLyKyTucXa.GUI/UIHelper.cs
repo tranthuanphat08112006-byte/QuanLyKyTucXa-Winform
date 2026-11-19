@@ -33,6 +33,44 @@ namespace QuanLyKyTucXa.GUI
             dgv.RowHeadersVisible = false;
             dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
+
+        /// <summary>
+        /// Cập nhật nhãn hiển thị trạng thái bộ lọc độ mạnh mật khẩu theo thời gian thực.
+        /// </summary>
+        public static void UpdatePasswordStrengthLabel(Label lbl, string password, string emptyHint)
+        {
+            if (lbl == null) return;
+
+            if (string.IsNullOrEmpty(password))
+            {
+                lbl.Text = emptyHint;
+                lbl.ForeColor = Color.FromArgb(100, 116, 139);
+                return;
+            }
+
+            bool hasMinLength, hasUpper, hasLower, hasDigit, hasSpecial, hasNoWhitespace;
+            bool isValid = QuanLyKyTucXa.BLL.TaiKhoanBLL.EvaluatePasswordStrength(
+                password,
+                out hasMinLength,
+                out hasUpper,
+                out hasLower,
+                out hasDigit,
+                out hasSpecial,
+                out hasNoWhitespace);
+
+            lbl.Text = string.Format(
+                "{0} ≥6 ký tự  {1} Hoa  {2} Thường  {3} Số  {4} Ký tự ĐB{5}",
+                hasMinLength ? "✓" : "✗",
+                hasUpper ? "✓" : "✗",
+                hasLower ? "✓" : "✗",
+                hasDigit ? "✓" : "✗",
+                hasSpecial ? "✓" : "✗",
+                hasNoWhitespace ? "" : "  ✗ Không khoảng trắng");
+
+            lbl.ForeColor = isValid
+                ? Color.FromArgb(22, 163, 74)
+                : Color.FromArgb(220, 38, 38);
+        }
     }
 
     /// <summary>
@@ -373,6 +411,123 @@ namespace QuanLyKyTucXa.GUI
                     bodyPath.AddArc(size * 0.18f, size * 0.55f, size * 0.64f, size * 0.60f, 180, 180);
                     bodyPath.CloseFigure();
                     g.FillPath(fgBrush, bodyPath);
+                }
+            }
+            return bmp;
+        }
+
+        public static Bitmap CreateAccountIcon(Color color, int size = 20)
+        {
+            Bitmap bmp = new Bitmap(size, size);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                using (SolidBrush brush = new SolidBrush(color))
+                using (Pen pen = new Pen(color, Math.Max(1.5f, size * 0.08f)))
+                {
+                    // Đầu người dùng
+                    float headSize = size * 0.32f;
+                    float headX = (size - headSize) / 2;
+                    float headY = size * 0.12f;
+                    g.DrawEllipse(pen, headX, headY, headSize, headSize);
+
+                    // Thân người dùng
+                    GraphicsPath bodyPath = new GraphicsPath();
+                    bodyPath.AddArc(size * 0.15f, size * 0.48f, size * 0.70f, size * 0.50f, 180, 180);
+                    g.DrawPath(pen, bodyPath);
+
+                    // Dấu khiên bảo mật nhỏ góc dưới
+                    PointF[] shield = new PointF[]
+                    {
+                        new PointF(size * 0.65f, size * 0.60f),
+                        new PointF(size * 0.90f, size * 0.60f),
+                        new PointF(size * 0.90f, size * 0.78f),
+                        new PointF(size * 0.775f, size * 0.92f),
+                        new PointF(size * 0.65f, size * 0.78f)
+                    };
+                    g.FillPolygon(brush, shield);
+                }
+            }
+            return bmp;
+        }
+
+        public static Bitmap CreateKeyIcon(Color color, int size = 20)
+        {
+            Bitmap bmp = new Bitmap(size, size);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                using (Pen pen = new Pen(color, Math.Max(1.8f, size * 0.09f)))
+                using (SolidBrush brush = new SolidBrush(color))
+                {
+                    // Vòng tròn đầu chìa khóa
+                    g.DrawEllipse(pen, size * 0.12f, size * 0.15f, size * 0.38f, size * 0.38f);
+                    // Lỗ khóa nhỏ
+                    g.FillEllipse(brush, size * 0.25f, size * 0.28f, size * 0.12f, size * 0.12f);
+
+                    // Thân chìa khóa
+                    g.DrawLine(pen, size * 0.45f, size * 0.45f, size * 0.85f, size * 0.85f);
+                    // Răng chìa khóa
+                    g.DrawLine(pen, size * 0.70f, size * 0.70f, size * 0.80f, size * 0.60f);
+                    g.DrawLine(pen, size * 0.80f, size * 0.80f, size * 0.90f, size * 0.70f);
+                }
+            }
+            return bmp;
+        }
+
+        public static Bitmap CreateBackupIcon(Color color, int size = 20)
+        {
+            Bitmap bmp = new Bitmap(size, size);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                using (Pen pen = new Pen(color, Math.Max(1.5f, size * 0.08f)))
+                using (SolidBrush brush = new SolidBrush(color))
+                {
+                    // 3 đĩa ổ cứng dữ liệu (Database Stack)
+                    float w = size * 0.65f;
+                    float h = size * 0.20f;
+                    float x = size * 0.175f;
+
+                    // Đĩa 1 (trên cùng)
+                    g.DrawEllipse(pen, x, size * 0.12f, w, h);
+                    // Đĩa 2 (giữa)
+                    g.DrawArc(pen, x, size * 0.36f, w, h, 0, 180);
+                    // Đĩa 3 (dưới)
+                    g.DrawArc(pen, x, size * 0.60f, w, h, 0, 180);
+                    // Đường thẳng hai bên nối đĩa
+                    g.DrawLine(pen, x, size * 0.22f, x, size * 0.70f);
+                    g.DrawLine(pen, x + w, size * 0.22f, x + w, size * 0.70f);
+                }
+            }
+            return bmp;
+        }
+
+        public static Bitmap CreateEyeIcon(Color color, int size = 16, bool isOpen = true)
+        {
+            Bitmap bmp = new Bitmap(size, size);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                using (Pen pen = new Pen(color, 1.5f))
+                using (SolidBrush brush = new SolidBrush(color))
+                {
+                    // Đường cong mí mắt
+                    GraphicsPath eyePath = new GraphicsPath();
+                    eyePath.AddArc(size * 0.1f, size * 0.25f, size * 0.8f, size * 0.6f, 200, 140);
+                    eyePath.AddArc(size * 0.1f, size * 0.15f, size * 0.8f, size * 0.6f, 20, 140);
+                    g.DrawPath(pen, eyePath);
+
+                    if (isOpen)
+                    {
+                        // Con ngươi mắt
+                        g.FillEllipse(brush, size * 0.38f, size * 0.38f, size * 0.24f, size * 0.24f);
+                    }
+                    else
+                    {
+                        // Gạch chéo mắt khi ẩn
+                        g.DrawLine(pen, size * 0.18f, size * 0.82f, size * 0.82f, size * 0.18f);
+                    }
                 }
             }
             return bmp;
