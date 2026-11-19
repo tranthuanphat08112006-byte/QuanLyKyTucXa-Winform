@@ -115,6 +115,9 @@
     <EmbeddedResource Include="frmChiTietPhong.resx">
       <DependentUpon>frmChiTietPhong.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UCHopDong.resx">
+      <DependentUpon>UCHopDong.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UCPhong.resx">
       <DependentUpon>UCPhong.cs</DependentUpon>
     </EmbeddedResource>

@@ -131,7 +131,7 @@ namespace QuanLyKyTucXa.GUI
             this.pnlTopHeader.Padding = new System.Windows.Forms.Padding(16, 12, 16, 12);
             this.pnlTopHeader.RowCount = 1;
             this.pnlTopHeader.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.pnlTopHeader.Size = new System.Drawing.Size(900, 74);
+            this.pnlTopHeader.Size = new System.Drawing.Size(900, 90);
             this.pnlTopHeader.TabIndex = 0;
             // 
             // pnlHeaderText
@@ -144,7 +144,7 @@ namespace QuanLyKyTucXa.GUI
             this.pnlHeaderText.Location = new System.Drawing.Point(16, 12);
             this.pnlHeaderText.Margin = new System.Windows.Forms.Padding(0);
             this.pnlHeaderText.Name = "pnlHeaderText";
-            this.pnlHeaderText.Size = new System.Drawing.Size(546, 50);
+            this.pnlHeaderText.Size = new System.Drawing.Size(546, 66);
             this.pnlHeaderText.TabIndex = 0;
             // 
             // lblSubtitle
@@ -178,7 +178,7 @@ namespace QuanLyKyTucXa.GUI
             this.flpHeaderActions.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flpHeaderActions.Controls.Add(this.btnThemDayNha);
             this.flpHeaderActions.Controls.Add(this.btnThemMoi);
-            this.flpHeaderActions.Location = new System.Drawing.Point(572, 18);
+            this.flpHeaderActions.Location = new System.Drawing.Point(572, 26);
             this.flpHeaderActions.Margin = new System.Windows.Forms.Padding(10, 6, 0, 6);
             this.flpHeaderActions.Name = "flpHeaderActions";
             this.flpHeaderActions.Size = new System.Drawing.Size(312, 38);
@@ -231,7 +231,7 @@ namespace QuanLyKyTucXa.GUI
             this.tlpStats.Controls.Add(this.pnlCard3, 2, 0);
             this.tlpStats.Controls.Add(this.pnlCard4, 3, 0);
             this.tlpStats.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tlpStats.Location = new System.Drawing.Point(20, 90);
+            this.tlpStats.Location = new System.Drawing.Point(20, 106);
             this.tlpStats.Name = "tlpStats";
             this.tlpStats.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.tlpStats.RowCount = 1;
@@ -269,9 +269,9 @@ namespace QuanLyKyTucXa.GUI
             this.lblCard1Sub.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCard1Sub.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.lblCard1Sub.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblCard1Sub.Location = new System.Drawing.Point(12, 65);
+            this.lblCard1Sub.Location = new System.Drawing.Point(12, 77);
             this.lblCard1Sub.Name = "lblCard1Sub";
-            this.lblCard1Sub.Size = new System.Drawing.Size(190, 29);
+            this.lblCard1Sub.Size = new System.Drawing.Size(190, 35);
             this.lblCard1Sub.TabIndex = 3;
             this.lblCard1Sub.Text = "Khu nhà đang hoạt động";
             this.lblCard1Sub.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -282,9 +282,9 @@ namespace QuanLyKyTucXa.GUI
             this.lblTongDayNha.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblTongDayNha.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblTongDayNha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(148)))), ((int)(((byte)(136)))));
-            this.lblTongDayNha.Location = new System.Drawing.Point(12, 28);
+            this.lblTongDayNha.Location = new System.Drawing.Point(12, 40);
             this.lblTongDayNha.Name = "lblTongDayNha";
-            this.lblTongDayNha.Size = new System.Drawing.Size(32, 37);
+            this.lblTongDayNha.Size = new System.Drawing.Size(33, 37);
             this.lblTongDayNha.TabIndex = 2;
             this.lblTongDayNha.Text = "0";
             // 
@@ -339,9 +339,9 @@ namespace QuanLyKyTucXa.GUI
             this.lblCard2Sub.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCard2Sub.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.lblCard2Sub.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblCard2Sub.Location = new System.Drawing.Point(12, 65);
+            this.lblCard2Sub.Location = new System.Drawing.Point(12, 77);
             this.lblCard2Sub.Name = "lblCard2Sub";
-            this.lblCard2Sub.Size = new System.Drawing.Size(190, 29);
+            this.lblCard2Sub.Size = new System.Drawing.Size(190, 35);
             this.lblCard2Sub.TabIndex = 3;
             this.lblCard2Sub.Text = "Tổng sức chứa: 0 giường";
             this.lblCard2Sub.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -352,9 +352,9 @@ namespace QuanLyKyTucXa.GUI
             this.lblTongPhong.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblTongPhong.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblTongPhong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
-            this.lblTongPhong.Location = new System.Drawing.Point(12, 28);
+            this.lblTongPhong.Location = new System.Drawing.Point(12, 40);
             this.lblTongPhong.Name = "lblTongPhong";
-            this.lblTongPhong.Size = new System.Drawing.Size(32, 37);
+            this.lblTongPhong.Size = new System.Drawing.Size(33, 37);
             this.lblTongPhong.TabIndex = 2;
             this.lblTongPhong.Text = "0";
             // 
@@ -409,9 +409,9 @@ namespace QuanLyKyTucXa.GUI
             this.lblCard3Sub.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCard3Sub.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.lblCard3Sub.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblCard3Sub.Location = new System.Drawing.Point(12, 65);
+            this.lblCard3Sub.Location = new System.Drawing.Point(12, 77);
             this.lblCard3Sub.Name = "lblCard3Sub";
-            this.lblCard3Sub.Size = new System.Drawing.Size(190, 29);
+            this.lblCard3Sub.Size = new System.Drawing.Size(190, 35);
             this.lblCard3Sub.TabIndex = 3;
             this.lblCard3Sub.Text = "Còn 0 giường trống sẵn sàng";
             this.lblCard3Sub.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -422,9 +422,9 @@ namespace QuanLyKyTucXa.GUI
             this.lblPhongTrong.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblPhongTrong.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblPhongTrong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(163)))), ((int)(((byte)(74)))));
-            this.lblPhongTrong.Location = new System.Drawing.Point(12, 28);
+            this.lblPhongTrong.Location = new System.Drawing.Point(12, 40);
             this.lblPhongTrong.Name = "lblPhongTrong";
-            this.lblPhongTrong.Size = new System.Drawing.Size(32, 37);
+            this.lblPhongTrong.Size = new System.Drawing.Size(33, 37);
             this.lblPhongTrong.TabIndex = 2;
             this.lblPhongTrong.Text = "0";
             // 
@@ -479,9 +479,9 @@ namespace QuanLyKyTucXa.GUI
             this.lblCard4Sub.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCard4Sub.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.lblCard4Sub.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblCard4Sub.Location = new System.Drawing.Point(12, 65);
+            this.lblCard4Sub.Location = new System.Drawing.Point(12, 77);
             this.lblCard4Sub.Name = "lblCard4Sub";
-            this.lblCard4Sub.Size = new System.Drawing.Size(190, 29);
+            this.lblCard4Sub.Size = new System.Drawing.Size(190, 35);
             this.lblCard4Sub.TabIndex = 3;
             this.lblCard4Sub.Text = "Đang lưu trú: 0 sinh viên";
             this.lblCard4Sub.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -492,9 +492,9 @@ namespace QuanLyKyTucXa.GUI
             this.lblPhongDay.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblPhongDay.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblPhongDay.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
-            this.lblPhongDay.Location = new System.Drawing.Point(12, 28);
+            this.lblPhongDay.Location = new System.Drawing.Point(12, 40);
             this.lblPhongDay.Name = "lblPhongDay";
-            this.lblPhongDay.Size = new System.Drawing.Size(32, 37);
+            this.lblPhongDay.Size = new System.Drawing.Size(33, 37);
             this.lblPhongDay.TabIndex = 2;
             this.lblPhongDay.Text = "0";
             // 
@@ -526,10 +526,10 @@ namespace QuanLyKyTucXa.GUI
             this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabMain.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
             this.tabMain.ItemSize = new System.Drawing.Size(210, 34);
-            this.tabMain.Location = new System.Drawing.Point(20, 212);
+            this.tabMain.Location = new System.Drawing.Point(20, 246);
             this.tabMain.Name = "tabMain";
             this.tabMain.SelectedIndex = 0;
-            this.tabMain.Size = new System.Drawing.Size(900, 512);
+            this.tabMain.Size = new System.Drawing.Size(900, 478);
             this.tabMain.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabMain.TabIndex = 2;
             // 
@@ -541,7 +541,7 @@ namespace QuanLyKyTucXa.GUI
             this.tabPhong.Location = new System.Drawing.Point(4, 38);
             this.tabPhong.Name = "tabPhong";
             this.tabPhong.Padding = new System.Windows.Forms.Padding(12);
-            this.tabPhong.Size = new System.Drawing.Size(892, 470);
+            this.tabPhong.Size = new System.Drawing.Size(892, 436);
             this.tabPhong.TabIndex = 0;
             this.tabPhong.Text = "Danh sách Phòng Ký túc xá";
             // 
@@ -549,9 +549,9 @@ namespace QuanLyKyTucXa.GUI
             // 
             this.dgvPhong.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPhong.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvPhong.Location = new System.Drawing.Point(12, 64);
+            this.dgvPhong.Location = new System.Drawing.Point(12, 60);
             this.dgvPhong.Name = "dgvPhong";
-            this.dgvPhong.Size = new System.Drawing.Size(868, 394);
+            this.dgvPhong.Size = new System.Drawing.Size(868, 364);
             this.dgvPhong.TabIndex = 1;
             this.dgvPhong.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPhong_CellDoubleClick);
             this.dgvPhong.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvPhong_CellFormatting);
@@ -572,7 +572,7 @@ namespace QuanLyKyTucXa.GUI
             this.pnlFilterPhong.Padding = new System.Windows.Forms.Padding(8, 8, 8, 4);
             this.pnlFilterPhong.RowCount = 1;
             this.pnlFilterPhong.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.pnlFilterPhong.Size = new System.Drawing.Size(868, 52);
+            this.pnlFilterPhong.Size = new System.Drawing.Size(868, 48);
             this.pnlFilterPhong.TabIndex = 0;
             // 
             // flpPhongFilters
@@ -587,7 +587,7 @@ namespace QuanLyKyTucXa.GUI
             this.flpPhongFilters.Location = new System.Drawing.Point(8, 8);
             this.flpPhongFilters.Margin = new System.Windows.Forms.Padding(0);
             this.flpPhongFilters.Name = "flpPhongFilters";
-            this.flpPhongFilters.Size = new System.Drawing.Size(586, 40);
+            this.flpPhongFilters.Size = new System.Drawing.Size(586, 36);
             this.flpPhongFilters.TabIndex = 0;
             // 
             // pnlSearchPhongGroup
@@ -637,7 +637,7 @@ namespace QuanLyKyTucXa.GUI
             this.cmbLocDayNha.FormattingEnabled = true;
             this.cmbLocDayNha.Location = new System.Drawing.Point(32, 4);
             this.cmbLocDayNha.Name = "cmbLocDayNha";
-            this.cmbLocDayNha.Size = new System.Drawing.Size(114, 24);
+            this.cmbLocDayNha.Size = new System.Drawing.Size(114, 25);
             this.cmbLocDayNha.TabIndex = 3;
             this.cmbLocDayNha.SelectedIndexChanged += new System.EventHandler(this.FilterPhong_Changed);
             // 
@@ -674,7 +674,7 @@ namespace QuanLyKyTucXa.GUI
             "Bảo trì"});
             this.cmbLocTrangThai.Location = new System.Drawing.Point(46, 4);
             this.cmbLocTrangThai.Name = "cmbLocTrangThai";
-            this.cmbLocTrangThai.Size = new System.Drawing.Size(114, 24);
+            this.cmbLocTrangThai.Size = new System.Drawing.Size(114, 25);
             this.cmbLocTrangThai.TabIndex = 5;
             this.cmbLocTrangThai.SelectedIndexChanged += new System.EventHandler(this.FilterPhong_Changed);
             // 
@@ -685,7 +685,7 @@ namespace QuanLyKyTucXa.GUI
             this.lblLocTrangThai.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
             this.lblLocTrangThai.Location = new System.Drawing.Point(0, 8);
             this.lblLocTrangThai.Name = "lblLocTrangThai";
-            this.lblLocTrangThai.Size = new System.Drawing.Size(44, 15);
+            this.lblLocTrangThai.Size = new System.Drawing.Size(42, 15);
             this.lblLocTrangThai.TabIndex = 4;
             this.lblLocTrangThai.Text = "T.Thái:";
             // 
@@ -779,7 +779,7 @@ namespace QuanLyKyTucXa.GUI
             this.tabDayNha.Location = new System.Drawing.Point(4, 38);
             this.tabDayNha.Name = "tabDayNha";
             this.tabDayNha.Padding = new System.Windows.Forms.Padding(12);
-            this.tabDayNha.Size = new System.Drawing.Size(892, 470);
+            this.tabDayNha.Size = new System.Drawing.Size(892, 436);
             this.tabDayNha.TabIndex = 1;
             this.tabDayNha.Text = "Quản lý Dãy nhà";
             // 
@@ -787,9 +787,9 @@ namespace QuanLyKyTucXa.GUI
             // 
             this.dgvDayNha.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDayNha.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvDayNha.Location = new System.Drawing.Point(12, 64);
+            this.dgvDayNha.Location = new System.Drawing.Point(12, 60);
             this.dgvDayNha.Name = "dgvDayNha";
-            this.dgvDayNha.Size = new System.Drawing.Size(868, 394);
+            this.dgvDayNha.Size = new System.Drawing.Size(868, 364);
             this.dgvDayNha.TabIndex = 1;
             this.dgvDayNha.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDayNha_CellDoubleClick);
             // 
@@ -809,7 +809,7 @@ namespace QuanLyKyTucXa.GUI
             this.pnlFilterDayNha.Padding = new System.Windows.Forms.Padding(8, 8, 8, 4);
             this.pnlFilterDayNha.RowCount = 1;
             this.pnlFilterDayNha.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.pnlFilterDayNha.Size = new System.Drawing.Size(868, 52);
+            this.pnlFilterDayNha.Size = new System.Drawing.Size(868, 48);
             this.pnlFilterDayNha.TabIndex = 0;
             // 
             // flpDayNhaFilters
@@ -822,7 +822,7 @@ namespace QuanLyKyTucXa.GUI
             this.flpDayNhaFilters.Location = new System.Drawing.Point(8, 8);
             this.flpDayNhaFilters.Margin = new System.Windows.Forms.Padding(0);
             this.flpDayNhaFilters.Name = "flpDayNhaFilters";
-            this.flpDayNhaFilters.Size = new System.Drawing.Size(630, 40);
+            this.flpDayNhaFilters.Size = new System.Drawing.Size(630, 36);
             this.flpDayNhaFilters.TabIndex = 0;
             // 
             // pnlSearchDayNhaGroup
@@ -851,7 +851,7 @@ namespace QuanLyKyTucXa.GUI
             this.lblTimDayNha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
             this.lblTimDayNha.Location = new System.Drawing.Point(0, 8);
             this.lblTimDayNha.Name = "lblTimDayNha";
-            this.lblTimDayNha.Size = new System.Drawing.Size(112, 15);
+            this.lblTimDayNha.Size = new System.Drawing.Size(105, 15);
             this.lblTimDayNha.TabIndex = 0;
             this.lblTimDayNha.Text = "Tìm kiếm dãy nhà:";
             // 
@@ -863,7 +863,7 @@ namespace QuanLyKyTucXa.GUI
             this.btnLamMoiDayNha.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLamMoiDayNha.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.btnLamMoiDayNha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-            this.btnLamMoiDayNha.Location = new System.Drawing.Point(344, 0);
+            this.btnLamMoiDayNha.Location = new System.Drawing.Point(304, 0);
             this.btnLamMoiDayNha.Margin = new System.Windows.Forms.Padding(0, 0, 4, 4);
             this.btnLamMoiDayNha.Name = "btnLamMoiDayNha";
             this.btnLamMoiDayNha.Size = new System.Drawing.Size(82, 32);
@@ -937,7 +937,6 @@ namespace QuanLyKyTucXa.GUI
             this.pnlHeaderText.ResumeLayout(false);
             this.flpHeaderActions.ResumeLayout(false);
             this.tlpStats.ResumeLayout(false);
-            this.tlpStats.PerformLayout();
             this.pnlCard1.ResumeLayout(false);
             this.pnlCard1Content.ResumeLayout(false);
             this.pnlCard1Content.PerformLayout();
