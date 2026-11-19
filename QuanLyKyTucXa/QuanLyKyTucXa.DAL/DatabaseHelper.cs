@@ -22,12 +22,12 @@ namespace QuanLyKyTucXa.DAL
                 }
                 else
                 {
-                    connectionString = @"Data Source=ADMIN;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
+                    connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
                 }
             }
             catch
             {
-                connectionString = @"Data Source=ADMIN;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
+                connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
             }
         }
 
