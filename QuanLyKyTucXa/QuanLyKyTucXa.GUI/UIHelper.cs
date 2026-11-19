@@ -306,6 +306,24 @@ namespace QuanLyKyTucXa.GUI
             return bmp;
         }
 
+        public static Bitmap CreateFinanceIcon(Color color, int size = 20)
+        {
+            Bitmap bmp = new Bitmap(size, size);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                using (SolidBrush brush = new SolidBrush(color))
+                using (Pen pen = new Pen(color, Math.Max(1.6f, size * 0.08f)))
+                {
+                    // Thẻ / ví thanh toán
+                    g.DrawRectangle(pen, size * 0.12f, size * 0.20f, size * 0.76f, size * 0.60f);
+                    g.FillRectangle(brush, size * 0.12f, size * 0.35f, size * 0.76f, size * 0.12f);
+                    g.FillEllipse(brush, size * 0.25f, size * 0.56f, size * 0.18f, size * 0.18f);
+                }
+            }
+            return bmp;
+        }
+
         public static Bitmap CreateLogoutIcon(Color color, int size = 20)
         {
             Bitmap bmp = new Bitmap(size, size);

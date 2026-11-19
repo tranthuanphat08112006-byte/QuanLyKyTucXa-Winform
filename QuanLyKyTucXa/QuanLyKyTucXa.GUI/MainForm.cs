@@ -17,6 +17,7 @@ namespace QuanLyKyTucXa.GUI
         private UCSinhVien ucSinhVien;
         private UCPhong ucPhong;
         private UCHopDong ucHopDong;
+        private UCDichVuTaiChinh ucDichVuTaiChinh;
         private UCTaiKhoan ucTaiKhoan;
 
         public MainForm()
@@ -48,6 +49,7 @@ namespace QuanLyKyTucXa.GUI
             this.btnSinhVien.Image = IconHelper.CreateStudentIcon(Color.White, 20);
             this.btnPhong.Image = IconHelper.CreateRoomIcon(Color.FromArgb(203, 213, 225), 20);
             this.btnHopDong.Image = IconHelper.CreateContractIcon(Color.FromArgb(203, 213, 225), 20);
+            this.btnDichVuTaiChinh.Image = IconHelper.CreateFinanceIcon(Color.FromArgb(203, 213, 225), 20);
             this.btnTaiKhoan.Image = IconHelper.CreateAccountIcon(Color.FromArgb(203, 213, 225), 20);
             this.btnDoiMatKhau.Image = IconHelper.CreateKeyIcon(Color.FromArgb(203, 213, 225), 18);
             this.btnDangXuat.Image = IconHelper.CreateLogoutIcon(Color.FromArgb(248, 113, 113), 18);
@@ -66,7 +68,7 @@ namespace QuanLyKyTucXa.GUI
             if (!QuanLyKyTucXa.DTO.UserSession.IsAdmin)
             {
                 this.btnTaiKhoan.Visible = false;
-                this.pnlSpacer4.Visible = false;
+                this.pnlSpacer5.Visible = false;
             }
 
             // Mở mặc định màn hình Quản lý Sinh viên
@@ -144,6 +146,9 @@ namespace QuanLyKyTucXa.GUI
             btnHopDong.IsActive = false;
             btnHopDong.Image = IconHelper.CreateContractIcon(inactiveColor, 20);
 
+            btnDichVuTaiChinh.IsActive = false;
+            btnDichVuTaiChinh.Image = IconHelper.CreateFinanceIcon(inactiveColor, 20);
+
             btnTaiKhoan.IsActive = false;
             btnTaiKhoan.Image = IconHelper.CreateAccountIcon(inactiveColor, 20);
 
@@ -154,6 +159,8 @@ namespace QuanLyKyTucXa.GUI
                 btnPhong.Image = IconHelper.CreateRoomIcon(Color.White, 20);
             else if (selectedBtn == btnHopDong)
                 btnHopDong.Image = IconHelper.CreateContractIcon(Color.White, 20);
+            else if (selectedBtn == btnDichVuTaiChinh)
+                btnDichVuTaiChinh.Image = IconHelper.CreateFinanceIcon(Color.White, 20);
             else if (selectedBtn == btnTaiKhoan)
                 btnTaiKhoan.Image = IconHelper.CreateAccountIcon(Color.White, 20);
         }
@@ -192,6 +199,18 @@ namespace QuanLyKyTucXa.GUI
 
             // Tự động làm mới dữ liệu khi chuyển từ màn hình khác quay lại
             if (!isFirstLoad) ucHopDong.RefreshAllData();
+        }
+
+        private void btnDichVuTaiChinh_Click(object sender, EventArgs e)
+        {
+            SetActiveButton(btnDichVuTaiChinh);
+            bool isFirstLoad = ucDichVuTaiChinh == null;
+            if (isFirstLoad) ucDichVuTaiChinh = new UCDichVuTaiChinh();
+
+            LoadUserControl(ucDichVuTaiChinh, "Quản lý Dịch vụ & Tài chính");
+
+            // Tự động làm mới dữ liệu khi chuyển từ màn hình khác quay lại
+            if (!isFirstLoad) ucDichVuTaiChinh.RefreshAllData();
         }
 
         private void btnTaiKhoan_Click(object sender, EventArgs e)
