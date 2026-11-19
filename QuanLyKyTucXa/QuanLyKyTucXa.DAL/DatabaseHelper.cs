@@ -22,12 +22,12 @@ namespace QuanLyKyTucXa.DAL
                 }
                 else
                 {
-                    connectionString = @"Data Source=ADMIN;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
+                    connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
                 }
             }
             catch
             {
-                connectionString = @"Data Source=ADMIN;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
+                connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyKyTucXa;Integrated Security=True";
             }
         }
 
@@ -84,6 +84,32 @@ namespace QuanLyKyTucXa.DAL
                 }
             }
             return affectedRows;
+        }
+
+        // Hàm 3: Lấy giá trị đơn (SELECT COUNT, SCOPE_IDENTITY, ...)
+        public object ExecuteScalar(string query, SqlParameter[] parameters = null)
+        {
+            object result = null;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    if (parameters != null)
+                    {
+                        cmd.Parameters.AddRange(parameters);
+                    }
+                    try
+                    {
+                        conn.Open();
+                        result = cmd.ExecuteScalar();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Lỗi truy vấn giá trị: " + ex.Message);
+                    }
+                }
+            }
+            return result;
         }
     }
 }

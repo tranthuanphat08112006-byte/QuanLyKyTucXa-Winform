@@ -30,6 +30,8 @@ namespace QuanLyKyTucXa.GUI
         {
             this.pnlMenu = new System.Windows.Forms.Panel();
             this.pnlNavList = new System.Windows.Forms.Panel();
+            this.btnTaiKhoan = new QuanLyKyTucXa.GUI.ModernMenuButton();
+            this.pnlSpacer4 = new System.Windows.Forms.Panel();
             this.btnHopDong = new QuanLyKyTucXa.GUI.ModernMenuButton();
             this.pnlSpacer3 = new System.Windows.Forms.Panel();
             this.btnPhong = new QuanLyKyTucXa.GUI.ModernMenuButton();
@@ -39,6 +41,7 @@ namespace QuanLyKyTucXa.GUI
             this.lblMenuCategory = new System.Windows.Forms.Label();
             this.pnlUserSection = new System.Windows.Forms.Panel();
             this.btnDangXuat = new QuanLyKyTucXa.GUI.ModernMenuButton();
+            this.btnDoiMatKhau = new QuanLyKyTucXa.GUI.ModernMenuButton();
             this.pnlUserInfo = new System.Windows.Forms.Panel();
             this.lblUserRole = new System.Windows.Forms.Label();
             this.lblUserName = new System.Windows.Forms.Label();
@@ -79,6 +82,8 @@ namespace QuanLyKyTucXa.GUI
             // pnlNavList
             // 
             this.pnlNavList.BackColor = System.Drawing.Color.Transparent;
+            this.pnlNavList.Controls.Add(this.btnTaiKhoan);
+            this.pnlNavList.Controls.Add(this.pnlSpacer4);
             this.pnlNavList.Controls.Add(this.btnHopDong);
             this.pnlNavList.Controls.Add(this.pnlSpacer3);
             this.pnlNavList.Controls.Add(this.btnPhong);
@@ -116,6 +121,39 @@ namespace QuanLyKyTucXa.GUI
             this.btnHopDong.Text = "Quản lý Hợp đồng";
             this.btnHopDong.UseVisualStyleBackColor = true;
             this.btnHopDong.Click += new System.EventHandler(this.btnHopDong_Click);
+            // 
+            // btnTaiKhoan
+            // 
+            this.btnTaiKhoan.ActiveBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.btnTaiKhoan.ActiveForeColor = System.Drawing.Color.White;
+            this.btnTaiKhoan.BorderRadius = 10;
+            this.btnTaiKhoan.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTaiKhoan.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTaiKhoan.FlatAppearance.BorderSize = 0;
+            this.btnTaiKhoan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTaiKhoan.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTaiKhoan.HoverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(45)))), ((int)(((byte)(75)))));
+            this.btnTaiKhoan.HoverForeColor = System.Drawing.Color.White;
+            this.btnTaiKhoan.IsActive = false;
+            this.btnTaiKhoan.Location = new System.Drawing.Point(14, 224);
+            this.btnTaiKhoan.Name = "btnTaiKhoan";
+            this.btnTaiKhoan.NormalBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(38)))), ((int)(((byte)(66)))));
+            this.btnTaiKhoan.NormalForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
+            this.btnTaiKhoan.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
+            this.btnTaiKhoan.Size = new System.Drawing.Size(232, 44);
+            this.btnTaiKhoan.TabIndex = 7;
+            this.btnTaiKhoan.Text = "Quản lý Tài khoản";
+            this.btnTaiKhoan.UseVisualStyleBackColor = true;
+            this.btnTaiKhoan.Click += new System.EventHandler(this.btnTaiKhoan_Click);
+            // 
+            // pnlSpacer4
+            // 
+            this.pnlSpacer4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSpacer4.Location = new System.Drawing.Point(14, 216);
+            this.pnlSpacer4.Name = "pnlSpacer4";
+            this.pnlSpacer4.Size = new System.Drawing.Size(232, 8);
+            this.pnlSpacer4.TabIndex = 6;
+
             // 
             // pnlSpacer3
             // 
@@ -206,14 +244,38 @@ namespace QuanLyKyTucXa.GUI
             // 
             this.pnlUserSection.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(24)))), ((int)(((byte)(39)))));
             this.pnlUserSection.Controls.Add(this.btnDangXuat);
+            this.pnlUserSection.Controls.Add(this.btnDoiMatKhau);
             this.pnlUserSection.Controls.Add(this.pnlUserInfo);
             this.pnlUserSection.Controls.Add(this.pnlUserDivider);
             this.pnlUserSection.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlUserSection.Location = new System.Drawing.Point(0, 660);
+            this.pnlUserSection.Location = new System.Drawing.Point(0, 630);
             this.pnlUserSection.Name = "pnlUserSection";
             this.pnlUserSection.Padding = new System.Windows.Forms.Padding(14, 8, 14, 12);
-            this.pnlUserSection.Size = new System.Drawing.Size(260, 140);
+            this.pnlUserSection.Size = new System.Drawing.Size(260, 170);
             this.pnlUserSection.TabIndex = 2;
+            // 
+            // btnDoiMatKhau
+            // 
+            this.btnDoiMatKhau.ActiveBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.btnDoiMatKhau.ActiveForeColor = System.Drawing.Color.White;
+            this.btnDoiMatKhau.BorderRadius = 10;
+            this.btnDoiMatKhau.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnDoiMatKhau.FlatAppearance.BorderSize = 0;
+            this.btnDoiMatKhau.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDoiMatKhau.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDoiMatKhau.HoverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(45)))), ((int)(((byte)(75)))));
+            this.btnDoiMatKhau.HoverForeColor = System.Drawing.Color.White;
+            this.btnDoiMatKhau.IsActive = false;
+            this.btnDoiMatKhau.Location = new System.Drawing.Point(14, 76);
+            this.btnDoiMatKhau.Name = "btnDoiMatKhau";
+            this.btnDoiMatKhau.NormalBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(38)))), ((int)(((byte)(66)))));
+            this.btnDoiMatKhau.NormalForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
+            this.btnDoiMatKhau.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
+            this.btnDoiMatKhau.Size = new System.Drawing.Size(232, 38);
+            this.btnDoiMatKhau.TabIndex = 2;
+            this.btnDoiMatKhau.Text = "Đổi mật khẩu";
+            this.btnDoiMatKhau.UseVisualStyleBackColor = true;
+            this.btnDoiMatKhau.Click += new System.EventHandler(this.btnDoiMatKhau_Click);
             // 
             // btnDangXuat
             // 
@@ -221,20 +283,19 @@ namespace QuanLyKyTucXa.GUI
             this.btnDangXuat.ActiveForeColor = System.Drawing.Color.White;
             this.btnDangXuat.BorderRadius = 10;
             this.btnDangXuat.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnDangXuat.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnDangXuat.FlatAppearance.BorderSize = 0;
             this.btnDangXuat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDangXuat.Font = new System.Drawing.Font("Segoe UI Semibold", 9.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDangXuat.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDangXuat.HoverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
             this.btnDangXuat.HoverForeColor = System.Drawing.Color.White;
             this.btnDangXuat.IsActive = false;
-            this.btnDangXuat.Location = new System.Drawing.Point(14, 88);
+            this.btnDangXuat.Location = new System.Drawing.Point(14, 120);
             this.btnDangXuat.Name = "btnDangXuat";
             this.btnDangXuat.NormalBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(25)))), ((int)(((byte)(35)))));
             this.btnDangXuat.NormalForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(113)))), ((int)(((byte)(113)))));
             this.btnDangXuat.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
-            this.btnDangXuat.Size = new System.Drawing.Size(232, 40);
-            this.btnDangXuat.TabIndex = 2;
+            this.btnDangXuat.Size = new System.Drawing.Size(232, 38);
+            this.btnDangXuat.TabIndex = 3;
             this.btnDangXuat.Text = "Đăng xuất";
             this.btnDangXuat.UseVisualStyleBackColor = true;
             this.btnDangXuat.Click += new System.EventHandler(this.btnDangXuat_Click);
@@ -462,12 +523,15 @@ namespace QuanLyKyTucXa.GUI
         private QuanLyKyTucXa.GUI.ModernMenuButton btnSinhVien;
         private QuanLyKyTucXa.GUI.ModernMenuButton btnPhong;
         private QuanLyKyTucXa.GUI.ModernMenuButton btnHopDong;
+        private QuanLyKyTucXa.GUI.ModernMenuButton btnTaiKhoan;
+        private System.Windows.Forms.Panel pnlSpacer4;
         private System.Windows.Forms.Panel pnlUserSection;
         private System.Windows.Forms.Panel pnlUserDivider;
         private System.Windows.Forms.Panel pnlUserInfo;
         private System.Windows.Forms.PictureBox picAvatar;
         private System.Windows.Forms.Label lblUserName;
         private System.Windows.Forms.Label lblUserRole;
+        private QuanLyKyTucXa.GUI.ModernMenuButton btnDoiMatKhau;
         private QuanLyKyTucXa.GUI.ModernMenuButton btnDangXuat;
         private System.Windows.Forms.Label lblHeaderTitle;
         private System.Windows.Forms.Button btnMinApp;
