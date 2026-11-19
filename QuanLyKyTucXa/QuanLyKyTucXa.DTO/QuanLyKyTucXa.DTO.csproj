@@ -42,9 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CauHinhDichVuDTO.cs" />
+    <Compile Include="DayNha.cs" />
     <Compile Include="DienNuocDTO.cs" />
     <Compile Include="HoaDonDTO.cs" />
     <Compile Include="HopDongDTO.cs" />
+    <Compile Include="Phong.cs" />
     <Compile Include="SinhVien.cs" />
     <Compile Include="TaiKhoanDTO.cs" />
     <Compile Include="ThanhToanDTO.cs" />

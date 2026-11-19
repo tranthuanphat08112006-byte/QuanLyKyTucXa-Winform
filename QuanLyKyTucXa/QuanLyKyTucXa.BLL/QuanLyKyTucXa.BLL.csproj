@@ -64,6 +64,7 @@
     <Compile Include="PhongBLL.cs" />
     <Compile Include="TaiKhoanBLL.cs" />
     <Compile Include="ThanhToanBLL.cs" />
+    <Compile Include="UTIL\PasswordCheck.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuanLyKyTucXa.DAL\QuanLyKyTucXa.DAL.csproj">

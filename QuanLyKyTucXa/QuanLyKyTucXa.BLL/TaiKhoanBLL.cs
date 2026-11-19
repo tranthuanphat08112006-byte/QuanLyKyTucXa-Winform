@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using QuanLyKyTucXa.BLL.UTIL;
 using QuanLyKyTucXa.DAL;
 using QuanLyKyTucXa.DTO;
 
@@ -30,16 +31,8 @@ namespace QuanLyKyTucXa.BLL
                 throw new Exception("Tên đăng nhập hoặc mật khẩu không chính xác!");
             }
 
-            // Kiểm tra mật khẩu mã hóa BCrypt
-            bool isValidPassword = false;
-            try
-            {
-                isValidPassword = BCrypt.Net.BCrypt.Verify(password, user.MatKhauHash);
-            }
-            catch
-            {
-                isValidPassword = false;
-            }
+            // Kiểm tra mật khẩu mã hóa BCrypt thông qua UTIL.PasswordCheck
+            bool isValidPassword = PasswordCheck.VerifyPassword(password, user.MatKhauHash);
 
             if (!isValidPassword)
             {
@@ -106,7 +99,7 @@ namespace QuanLyKyTucXa.BLL
                 VaiTro = safeRole,
                 TrangThai = true,
                 NgayTao = DateTime.Now,
-                MatKhauHash = BCrypt.Net.BCrypt.HashPassword(password, workFactor: 11)
+                MatKhauHash = PasswordCheck.HashPassword(password)
             };
 
             return taiKhoanDAL.InsertTaiKhoan(tk);
@@ -169,8 +162,8 @@ namespace QuanLyKyTucXa.BLL
             if (string.IsNullOrWhiteSpace(tk.VaiTro))
                 throw new Exception("Vui lòng chọn vai trò cho tài khoản!");
 
-            // Mã hóa mật khẩu bằng BCrypt
-            tk.MatKhauHash = BCrypt.Net.BCrypt.HashPassword(plainPassword, workFactor: 11);
+            // Mã hóa mật khẩu bằng BCrypt thông qua UTIL.PasswordCheck
+            tk.MatKhauHash = PasswordCheck.HashPassword(plainPassword);
             tk.TenDangNhap = username;
             tk.NgayTao = DateTime.Now;
 
@@ -289,7 +282,7 @@ namespace QuanLyKyTucXa.BLL
             if (target == null)
                 throw new Exception("Không tìm thấy tài khoản để đặt lại mật khẩu!");
 
-            string newHash = BCrypt.Net.BCrypt.HashPassword(newPassword, workFactor: 11);
+            string newHash = PasswordCheck.HashPassword(newPassword);
             return taiKhoanDAL.UpdateMatKhau(maTaiKhoan, newHash);
         }
 
@@ -317,20 +310,11 @@ namespace QuanLyKyTucXa.BLL
             if (user == null)
                 throw new Exception("Tài khoản người dùng không tồn tại hoặc đã bị thay đổi!");
 
-            bool isOldPasswordCorrect = false;
-            try
-            {
-                isOldPasswordCorrect = BCrypt.Net.BCrypt.Verify(currentPassword, user.MatKhauHash);
-            }
-            catch
-            {
-                isOldPasswordCorrect = false;
-            }
-
+            bool isOldPasswordCorrect = PasswordCheck.VerifyPassword(currentPassword, user.MatKhauHash);
             if (!isOldPasswordCorrect)
                 throw new Exception("Mật khẩu hiện tại không chính xác!");
 
-            string newHash = BCrypt.Net.BCrypt.HashPassword(newPassword, workFactor: 11);
+            string newHash = PasswordCheck.HashPassword(newPassword);
             return taiKhoanDAL.UpdateMatKhau(maTaiKhoan, newHash);
         }
 
@@ -372,7 +356,7 @@ namespace QuanLyKyTucXa.BLL
 
         #endregion
 
-        #region 5. Bộ lọc & Kiểm tra độ mạnh mật khẩu
+        #region 5. Bộ lọc & Kiểm tra độ mạnh mật khẩu (Ủy quyền qua UTIL.PasswordCheck)
 
         /// <summary>
         /// Đánh giá các tiêu chí độ mạnh của mật khẩu để hiển thị trực quan trên giao diện hoặc kiểm tra ở BLL.
@@ -386,37 +370,7 @@ namespace QuanLyKyTucXa.BLL
             out bool hasSpecial,
             out bool hasNoWhitespace)
         {
-            if (string.IsNullOrEmpty(password))
-            {
-                hasMinLength = false;
-                hasUpper = false;
-                hasLower = false;
-                hasDigit = false;
-                hasSpecial = false;
-                hasNoWhitespace = true;
-                return false;
-            }
-
-            hasMinLength = password.Length >= 6;
-            hasUpper = password.Any(char.IsUpper);
-            hasLower = password.Any(char.IsLower);
-            hasDigit = password.Any(char.IsDigit);
-            hasSpecial = password.Any(ch => !char.IsLetterOrDigit(ch) && !char.IsWhiteSpace(ch));
-            hasNoWhitespace = !password.Any(char.IsWhiteSpace);
-
-            return hasMinLength && hasUpper && hasLower && hasDigit && hasSpecial && hasNoWhitespace;
-        }
-
-        /// <summary>
-        /// Kiểm tra bắt buộc độ mạnh mật khẩu ở tầng BLL khi tạo mới, đặt lại hoặc đổi mật khẩu.
-        /// </summary>
-        public static void ValidatePasswordStrength(string password, string fieldLabel = "Mật khẩu")
-        {
-            if (string.IsNullOrWhiteSpace(password))
-                throw new Exception($"{fieldLabel} không được để trống!");
-
-            bool hasMinLength, hasUpper, hasLower, hasDigit, hasSpecial, hasNoWhitespace;
-            bool isValid = EvaluatePasswordStrength(
+            return PasswordCheck.EvaluatePasswordStrength(
                 password,
                 out hasMinLength,
                 out hasUpper,
@@ -424,20 +378,14 @@ namespace QuanLyKyTucXa.BLL
                 out hasDigit,
                 out hasSpecial,
                 out hasNoWhitespace);
+        }
 
-            if (isValid) return;
-
-            if (!hasNoWhitespace)
-                throw new Exception($"{fieldLabel} không được chứa khoảng trắng!");
-
-            List<string> missing = new List<string>();
-            if (!hasMinLength) missing.Add("tối thiểu 6 ký tự");
-            if (!hasUpper) missing.Add("ít nhất 1 chữ in hoa (A-Z)");
-            if (!hasLower) missing.Add("ít nhất 1 chữ thường (a-z)");
-            if (!hasDigit) missing.Add("ít nhất 1 chữ số (0-9)");
-            if (!hasSpecial) missing.Add("ít nhất 1 ký tự đặc biệt (VD: @, #, $, !...)");
-
-            throw new Exception($"{fieldLabel} chưa đạt yêu cầu bảo mật! Cần bổ sung:\n- " + string.Join("\n- ", missing));
+        /// <summary>
+        /// Kiểm tra bắt buộc độ mạnh mật khẩu ở tầng BLL khi tạo mới, đặt lại hoặc đổi mật khẩu.
+        /// </summary>
+        public static void ValidatePasswordStrength(string password, string fieldLabel = "Mật khẩu")
+        {
+            PasswordCheck.ValidatePasswordStrength(password, fieldLabel);
         }
 
         #endregion
