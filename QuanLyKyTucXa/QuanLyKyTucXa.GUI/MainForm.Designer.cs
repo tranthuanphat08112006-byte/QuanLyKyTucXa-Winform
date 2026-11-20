@@ -31,6 +31,8 @@ namespace QuanLyKyTucXa.GUI
             this.pnlMenu = new System.Windows.Forms.Panel();
             this.pnlNavList = new System.Windows.Forms.Panel();
             this.btnTaiKhoan = new QuanLyKyTucXa.GUI.ModernMenuButton();
+            this.pnlSpacer6 = new System.Windows.Forms.Panel();
+            this.btnThongKe = new QuanLyKyTucXa.GUI.ModernMenuButton();
             this.pnlSpacer5 = new System.Windows.Forms.Panel();
             this.btnDichVuTaiChinh = new QuanLyKyTucXa.GUI.ModernMenuButton();
             this.pnlSpacer4 = new System.Windows.Forms.Panel();
@@ -86,6 +88,8 @@ namespace QuanLyKyTucXa.GUI
             this.pnlNavList.BackColor = System.Drawing.Color.Transparent;
             this.pnlNavList.Controls.Add(this.btnTaiKhoan);
             this.pnlNavList.Controls.Add(this.pnlSpacer5);
+            this.pnlNavList.Controls.Add(this.btnThongKe);
+            this.pnlNavList.Controls.Add(this.pnlSpacer6);
             this.pnlNavList.Controls.Add(this.btnDichVuTaiChinh);
             this.pnlNavList.Controls.Add(this.pnlSpacer4);
             this.pnlNavList.Controls.Add(this.btnHopDong);
@@ -157,6 +161,38 @@ namespace QuanLyKyTucXa.GUI
             this.btnHopDong.Text = "Quản lý Hợp đồng";
             this.btnHopDong.UseVisualStyleBackColor = true;
             this.btnHopDong.Click += new System.EventHandler(this.btnHopDong_Click);
+            // 
+            // btnThongKe
+            // 
+            this.btnThongKe.ActiveBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.btnThongKe.ActiveForeColor = System.Drawing.Color.White;
+            this.btnThongKe.BorderRadius = 10;
+            this.btnThongKe.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnThongKe.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnThongKe.FlatAppearance.BorderSize = 0;
+            this.btnThongKe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThongKe.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThongKe.HoverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(45)))), ((int)(((byte)(75)))));
+            this.btnThongKe.HoverForeColor = System.Drawing.Color.White;
+            this.btnThongKe.IsActive = false;
+            this.btnThongKe.Location = new System.Drawing.Point(14, 276);
+            this.btnThongKe.Name = "btnThongKe";
+            this.btnThongKe.NormalBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(38)))), ((int)(((byte)(66)))));
+            this.btnThongKe.NormalForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
+            this.btnThongKe.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
+            this.btnThongKe.Size = new System.Drawing.Size(232, 44);
+            this.btnThongKe.TabIndex = 8;
+            this.btnThongKe.Text = "Quản lý Thống kê";
+            this.btnThongKe.UseVisualStyleBackColor = true;
+            this.btnThongKe.Click += new System.EventHandler(this.btnThongKe_Click);
+            // 
+            // pnlSpacer6
+            // 
+            this.pnlSpacer6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSpacer6.Location = new System.Drawing.Point(14, 268);
+            this.pnlSpacer6.Name = "pnlSpacer6";
+            this.pnlSpacer6.Size = new System.Drawing.Size(232, 8);
+            this.pnlSpacer6.TabIndex = 8;
             // 
             // btnTaiKhoan
             // 
@@ -561,6 +597,8 @@ namespace QuanLyKyTucXa.GUI
         private QuanLyKyTucXa.GUI.ModernMenuButton btnPhong;
         private QuanLyKyTucXa.GUI.ModernMenuButton btnHopDong;
         private QuanLyKyTucXa.GUI.ModernMenuButton btnDichVuTaiChinh;
+        private System.Windows.Forms.Panel pnlSpacer6;
+        private QuanLyKyTucXa.GUI.ModernMenuButton btnThongKe;
         private System.Windows.Forms.Panel pnlSpacer5;
         private QuanLyKyTucXa.GUI.ModernMenuButton btnTaiKhoan;
         private System.Windows.Forms.Panel pnlUserSection;

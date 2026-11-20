@@ -532,5 +532,28 @@ namespace QuanLyKyTucXa.GUI
             }
             return bmp;
         }
+
+        public static Bitmap CreateChartIcon(Color color, int size = 20)
+        {
+            Bitmap bmp = new Bitmap(size, size);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                using (SolidBrush brush = new SolidBrush(color))
+                using (Pen pen = new Pen(color, Math.Max(1.6f, size * 0.08f)))
+                {
+                    // Trục tọa độ
+                    g.DrawLine(pen, size * 0.12f, size * 0.14f, size * 0.12f, size * 0.86f);
+                    g.DrawLine(pen, size * 0.12f, size * 0.86f, size * 0.90f, size * 0.86f);
+
+                    // 3 cột biểu đồ tăng dần
+                    float barW = size * 0.16f;
+                    g.FillRectangle(brush, size * 0.24f, size * 0.56f, barW, size * 0.28f);
+                    g.FillRectangle(brush, size * 0.46f, size * 0.38f, barW, size * 0.46f);
+                    g.FillRectangle(brush, size * 0.68f, size * 0.22f, barW, size * 0.62f);
+                }
+            }
+            return bmp;
+        }
     }
 }

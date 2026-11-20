@@ -50,6 +50,7 @@
     <Compile Include="SinhVien.cs" />
     <Compile Include="TaiKhoanDTO.cs" />
     <Compile Include="ThanhToanDTO.cs" />
+    <Compile Include="ThongKeDTO.cs" />
     <Compile Include="VaiTroDTO.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
