@@ -13,6 +13,7 @@ namespace QuanLyKyTucXa.BLL
     public class TaiKhoanBLL
     {
         private TaiKhoanDAL taiKhoanDAL = new TaiKhoanDAL();
+        private VaiTroDAL vaiTroDAL = new VaiTroDAL();
 
         #region 1. Đăng nhập / Đăng xuất & Kiểm tra phiên
 
@@ -118,25 +119,47 @@ namespace QuanLyKyTucXa.BLL
             }
         }
 
+        private void CheckTaiKhoanPermission(string action)
+        {
+            if (!UserSession.IsLoggedIn)
+            {
+                throw new UnauthorizedAccessException("Phiên đăng nhập đã hết hạn hoặc chưa đăng nhập. Vui lòng đăng nhập lại!");
+            }
+
+            bool allowed = false;
+            switch (action)
+            {
+                case "View": allowed = UserSession.CanView(ModuleSystem.TaiKhoan); break;
+                case "Add": allowed = UserSession.CanAdd(ModuleSystem.TaiKhoan); break;
+                case "Edit": allowed = UserSession.CanEdit(ModuleSystem.TaiKhoan); break;
+                case "Delete": allowed = UserSession.CanDelete(ModuleSystem.TaiKhoan); break;
+            }
+
+            if (!allowed)
+            {
+                throw new UnauthorizedAccessException("Bạn không có quyền thực hiện chức năng này trên module Quản lý Tài khoản!");
+            }
+        }
+
         #endregion
 
-        #region 2. Quản lý tài khoản (Chỉ dành cho Admin)
+        #region 2. Quản lý tài khoản
 
         public DataTable GetAllTaiKhoan()
         {
-            CheckAdminPermission();
+            CheckTaiKhoanPermission("View");
             return taiKhoanDAL.GetAllTaiKhoan();
         }
 
         public DataTable FilterTaiKhoan(string keyword, string vaiTro, string trangThai)
         {
-            CheckAdminPermission();
+            CheckTaiKhoanPermission("View");
             return taiKhoanDAL.FilterTaiKhoan(keyword ?? "", vaiTro ?? "Tất cả vai trò", trangThai ?? "Tất cả trạng thái");
         }
 
         public bool InsertTaiKhoan(TaiKhoanDTO tk, string plainPassword)
         {
-            CheckAdminPermission();
+            CheckTaiKhoanPermission("Add");
 
             if (tk == null)
                 throw new Exception("Dữ liệu tài khoản không hợp lệ!");
@@ -162,9 +185,13 @@ namespace QuanLyKyTucXa.BLL
             if (string.IsNullOrWhiteSpace(tk.VaiTro))
                 throw new Exception("Vui lòng chọn vai trò cho tài khoản!");
 
+            if (!vaiTroDAL.CheckMaVaiTroExists(tk.VaiTro.Trim()))
+                throw new Exception($"Vai trò '{tk.VaiTro}' không tồn tại trong hệ thống!");
+
             // Mã hóa mật khẩu bằng BCrypt thông qua UTIL.PasswordCheck
             tk.MatKhauHash = PasswordCheck.HashPassword(plainPassword);
             tk.TenDangNhap = username;
+            tk.VaiTro = tk.VaiTro.Trim();
             tk.NgayTao = DateTime.Now;
 
             return taiKhoanDAL.InsertTaiKhoan(tk);
@@ -172,7 +199,7 @@ namespace QuanLyKyTucXa.BLL
 
         public bool UpdateTaiKhoan(TaiKhoanDTO tk)
         {
-            CheckAdminPermission();
+            CheckTaiKhoanPermission("Edit");
 
             if (tk == null)
                 throw new Exception("Dữ liệu tài khoản không hợp lệ!");
@@ -186,6 +213,9 @@ namespace QuanLyKyTucXa.BLL
             if (string.IsNullOrWhiteSpace(tk.VaiTro))
                 throw new Exception("Vui lòng chọn vai trò cho tài khoản!");
 
+            if (!vaiTroDAL.CheckMaVaiTroExists(tk.VaiTro.Trim()))
+                throw new Exception($"Vai trò '{tk.VaiTro}' không tồn tại trong hệ thống!");
+
             TaiKhoanDTO currentInDb = taiKhoanDAL.GetTaiKhoanById(tk.MaTaiKhoan);
             if (currentInDb == null)
                 throw new Exception("Không tìm thấy thông tin tài khoản cần cập nhật!");
@@ -193,7 +223,8 @@ namespace QuanLyKyTucXa.BLL
             // Quy tắc an toàn: Không được tự hạ quyền hoặc tự khóa chính mình
             if (UserSession.CurrentUser != null && UserSession.CurrentUser.MaTaiKhoan == tk.MaTaiKhoan)
             {
-                if (!string.Equals(tk.VaiTro, "Admin", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(currentInDb.VaiTro, "Admin", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(tk.VaiTro, "Admin", StringComparison.OrdinalIgnoreCase))
                     throw new Exception("Bạn không thể tự hạ quyền Quản trị viên của chính mình!");
 
                 if (!tk.TrangThai)
@@ -216,12 +247,13 @@ namespace QuanLyKyTucXa.BLL
                 }
             }
 
+            tk.VaiTro = tk.VaiTro.Trim();
             return taiKhoanDAL.UpdateTaiKhoan(tk);
         }
 
         public bool ToggleTrangThai(int maTaiKhoan)
         {
-            CheckAdminPermission();
+            CheckTaiKhoanPermission("Edit");
 
             TaiKhoanDTO target = taiKhoanDAL.GetTaiKhoanById(maTaiKhoan);
             if (target == null)
@@ -249,7 +281,7 @@ namespace QuanLyKyTucXa.BLL
 
         public bool DeleteTaiKhoan(int maTaiKhoan)
         {
-            CheckAdminPermission();
+            CheckTaiKhoanPermission("Delete");
 
             if (UserSession.CurrentUser != null && UserSession.CurrentUser.MaTaiKhoan == maTaiKhoan)
             {
@@ -274,7 +306,7 @@ namespace QuanLyKyTucXa.BLL
 
         public bool AdminResetPassword(int maTaiKhoan, string newPassword)
         {
-            CheckAdminPermission();
+            CheckTaiKhoanPermission("Edit");
 
             ValidatePasswordStrength(newPassword, "Mật khẩu mới");
 

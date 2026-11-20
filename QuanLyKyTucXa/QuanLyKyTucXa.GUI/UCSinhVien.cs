@@ -31,7 +31,15 @@ namespace QuanLyKyTucXa.GUI
             isFilterLoading = false;
 
             // 2. Tải dữ liệu và cập nhật thẻ thống kê
+            ApplyPermissions();
             RefreshAllData();
+        }
+
+        private void ApplyPermissions()
+        {
+            btnThemMoi.Visible = UserSession.CanAdd(ModuleSystem.SinhVien);
+            btn_Sua.Visible = UserSession.CanEdit(ModuleSystem.SinhVien);
+            btn_Xoa.Visible = UserSession.CanDelete(ModuleSystem.SinhVien);
         }
 
         public void RefreshAllData()

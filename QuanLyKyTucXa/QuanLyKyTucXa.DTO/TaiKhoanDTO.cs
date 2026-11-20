@@ -9,6 +9,7 @@ namespace QuanLyKyTucXa.DTO
         public string MatKhauHash { get; set; }
         public string HoTen { get; set; }
         public string VaiTro { get; set; }
+        public string TenVaiTro { get; set; }
         public bool TrangThai { get; set; } = true;
         public DateTime NgayTao { get; set; } = DateTime.Now;
 
@@ -18,11 +19,15 @@ namespace QuanLyKyTucXa.DTO
         {
             get
             {
+                if (!string.IsNullOrWhiteSpace(TenVaiTro))
+                    return TenVaiTro;
                 if (string.Equals(VaiTro, "Admin", StringComparison.OrdinalIgnoreCase))
                     return "Quản trị viên";
                 if (string.Equals(VaiTro, "NhanVien", StringComparison.OrdinalIgnoreCase))
                     return "Nhân viên";
-                return "Sinh viên";
+                if (string.Equals(VaiTro, "SinhVien", StringComparison.OrdinalIgnoreCase))
+                    return "Sinh viên";
+                return VaiTro ?? "";
             }
         }
 

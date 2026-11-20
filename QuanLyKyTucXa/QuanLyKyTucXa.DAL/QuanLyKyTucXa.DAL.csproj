@@ -51,6 +51,7 @@
     <Compile Include="PhongDAL.cs" />
     <Compile Include="TaiKhoanDAL.cs" />
     <Compile Include="ThanhToanDAL.cs" />
+    <Compile Include="VaiTroDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuanLyKyTucXa.DTO\QuanLyKyTucXa.DTO.csproj">
