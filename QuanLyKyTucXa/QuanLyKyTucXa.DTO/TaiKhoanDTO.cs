@@ -25,8 +25,6 @@ namespace QuanLyKyTucXa.DTO
                     return "Quản trị viên";
                 if (string.Equals(VaiTro, "NhanVien", StringComparison.OrdinalIgnoreCase))
                     return "Nhân viên";
-                if (string.Equals(VaiTro, "SinhVien", StringComparison.OrdinalIgnoreCase))
-                    return "Sinh viên";
                 return VaiTro ?? "";
             }
         }

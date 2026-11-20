@@ -40,8 +40,6 @@ IF NOT EXISTS (SELECT 1 FROM VaiTro WHERE MaVaiTro = 'Admin')
     INSERT INTO VaiTro (MaVaiTro, TenVaiTro, MoTa) VALUES ('Admin', N'Quản trị viên', N'Toàn quyền quản trị hệ thống, tài khoản và phân quyền');
 IF NOT EXISTS (SELECT 1 FROM VaiTro WHERE MaVaiTro = 'NhanVien')
     INSERT INTO VaiTro (MaVaiTro, TenVaiTro, MoTa) VALUES ('NhanVien', N'Nhân viên', N'Quản lý sinh viên, phòng, hợp đồng và dịch vụ tài chính');
-IF NOT EXISTS (SELECT 1 FROM VaiTro WHERE MaVaiTro = 'SinhVien')
-    INSERT INTO VaiTro (MaVaiTro, TenVaiTro, MoTa) VALUES ('SinhVien', N'Sinh viên', N'Chỉ xem thông tin sinh viên, phòng, hợp đồng và hóa đơn');
 
 -- 2. Bảng TaiKhoan (Khởi tạo nếu chưa tồn tại trên CSDL mới)
 IF OBJECT_ID('TaiKhoan', 'U') IS NULL
@@ -115,18 +113,6 @@ IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'NhanVien' AND MaModule 
     INSERT INTO PhanQuyen VALUES ('NhanVien', 'DichVuTaiChinh', 1, 1, 1, 1);
 IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'NhanVien' AND MaModule = 'TaiKhoan')
     INSERT INTO PhanQuyen VALUES ('NhanVien', 'TaiKhoan', 0, 0, 0, 0);
-
--- Khởi tạo quyền mặc định cho SinhVien (Chỉ Xem 4 module nghiệp vụ)
-IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'SinhVien' AND MaModule = 'SinhVien')
-    INSERT INTO PhanQuyen VALUES ('SinhVien', 'SinhVien', 1, 0, 0, 0);
-IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'SinhVien' AND MaModule = 'Phong')
-    INSERT INTO PhanQuyen VALUES ('SinhVien', 'Phong', 1, 0, 0, 0);
-IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'SinhVien' AND MaModule = 'HopDong')
-    INSERT INTO PhanQuyen VALUES ('SinhVien', 'HopDong', 1, 0, 0, 0);
-IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'SinhVien' AND MaModule = 'DichVuTaiChinh')
-    INSERT INTO PhanQuyen VALUES ('SinhVien', 'DichVuTaiChinh', 1, 0, 0, 0);
-IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'SinhVien' AND MaModule = 'TaiKhoan')
-    INSERT INTO PhanQuyen VALUES ('SinhVien', 'TaiKhoan', 0, 0, 0, 0);
 
 -- 5. Khởi tạo tài khoản Admin mặc định nếu bảng TaiKhoan đang trống (Mật khẩu: Admin@123)
 IF NOT EXISTS (SELECT 1 FROM TaiKhoan WHERE VaiTro = 'Admin')

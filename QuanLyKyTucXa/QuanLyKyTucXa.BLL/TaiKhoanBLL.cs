@@ -84,9 +84,9 @@ namespace QuanLyKyTucXa.BLL
             {
                 safeRole = "NhanVien";
             }
-            else if (string.Equals(vaiTro, "SinhVien", StringComparison.OrdinalIgnoreCase) || string.Equals(vaiTro, "Sinh viên", StringComparison.OrdinalIgnoreCase))
+            else if (!string.IsNullOrWhiteSpace(vaiTro) && vaiTroDAL.CheckMaVaiTroExists(vaiTro.Trim()))
             {
-                safeRole = "SinhVien";
+                safeRole = vaiTro.Trim();
             }
             else
             {
