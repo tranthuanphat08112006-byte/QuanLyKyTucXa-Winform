@@ -66,6 +66,7 @@
     <Compile Include="TaiKhoanBLL.cs" />
     <Compile Include="ThanhToanBLL.cs" />
     <Compile Include="ThongKeBLL.cs" />
+    <Compile Include="VaiTroBLL.cs" />
     <Compile Include="UTIL\PasswordCheck.cs" />
     <Compile Include="UTIL\XlsxWriter.cs" />
   </ItemGroup>

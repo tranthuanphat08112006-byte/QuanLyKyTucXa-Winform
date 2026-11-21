@@ -151,6 +151,12 @@
     <Compile Include="frmChiTietTaiKhoan.Designer.cs">
       <DependentUpon>frmChiTietTaiKhoan.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmChiTietVaiTro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChiTietVaiTro.Designer.cs">
+      <DependentUpon>frmChiTietVaiTro.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmDoiMatKhau.cs">
       <SubType>Form</SubType>
     </Compile>

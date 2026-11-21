@@ -86,7 +86,7 @@ WHERE TrangThai = N'Đang hiệu lực' AND NgayKetThuc >= @Ngay";
         {
             const string query = @"
 SELECT MaSV, COUNT(*) AS SoHopDong,
-       STUFF((SELECT N', ' + h2.MaPhong FROM HopDong h2
+       STUFF((SELECT CONCAT(N', ', h2.MaPhong) FROM HopDong h2
               WHERE h2.MaSV = h.MaSV AND h2.TrangThai = N'Đang hiệu lực' AND h2.NgayKetThuc >= @Ngay
               FOR XML PATH('')), 1, 2, N'') AS DanhSachPhong
 FROM HopDong h
@@ -278,7 +278,7 @@ LEFT JOIN Phong p ON p.MaPhong = h.MaPhong
 LEFT JOIN SVTrongKy s ON s.MaHoaDon = h.MaHoaDon
 LEFT JOIN SinhVien sv ON sv.MaSV = s.MaSV
 OUTER APPLY (
-    SELECT TOP 1 ISNULL(p2.TenPhong, N'Phòng ' + hc.MaPhong) AS PhongDangO
+    SELECT TOP 1 ISNULL(p2.TenPhong, CONCAT(N'Phòng ', hc.MaPhong)) AS PhongDangO
     FROM HopDong hc
     LEFT JOIN Phong p2 ON p2.MaPhong = hc.MaPhong
     WHERE hc.MaSV = s.MaSV AND hc.TrangThai = N'Đang hiệu lực'

@@ -16,6 +16,7 @@ namespace QuanLyKyTucXa.GUI
         private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
 
         private TaiKhoanBLL taiKhoanBLL = new TaiKhoanBLL();
+        private VaiTroBLL vaiTroBLL = new VaiTroBLL();
         private bool isShowPassword = false;
 
         public frmDangNhap()
@@ -82,9 +83,10 @@ namespace QuanLyKyTucXa.GUI
                 btnDangNhap.Text = "ĐANG XÁC THỰC...";
 
                 TaiKhoanDTO user = taiKhoanBLL.Authenticate(username, password);
+                var permissions = vaiTroBLL.GetPhanQuyenByVaiTro(user.VaiTro);
 
-                // Lưu thông tin phiên đăng nhập
-                UserSession.Login(user);
+                // Lưu thông tin phiên đăng nhập và ma trận phân quyền
+                UserSession.Login(user, permissions);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
