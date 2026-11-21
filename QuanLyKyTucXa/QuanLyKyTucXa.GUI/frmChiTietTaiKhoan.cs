@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Windows.Forms;
 using QuanLyKyTucXa.BLL;
 using QuanLyKyTucXa.DTO;
@@ -7,7 +8,8 @@ namespace QuanLyKyTucXa.GUI
 {
     public partial class frmChiTietTaiKhoan : Form
     {
-        private TaiKhoanBLL taiKhoanBLL = new TaiKhoanBLL();
+        private readonly TaiKhoanBLL taiKhoanBLL = new TaiKhoanBLL();
+        private readonly VaiTroBLL vaiTroBLL = new VaiTroBLL();
         private TaiKhoanDTO tkCurrent = null;
         private bool isEditMode = false;
 
@@ -16,10 +18,11 @@ namespace QuanLyKyTucXa.GUI
         {
             InitializeComponent();
             isEditMode = false;
-            this.Text = "Thêm tài khoản quản trị mới";
+            this.Text = "Thêm tài khoản mới";
             lblFormTitle.Text = "THÊM TÀI KHOẢN MỚI";
-            lblFormSub.Text = "Khởi tạo tài khoản quản trị viên và thiết lập mật khẩu ban đầu";
+            lblFormSub.Text = "Khởi tạo tài khoản người dùng, gán vai trò và thiết lập mật khẩu ban đầu";
             txtMatKhau.TextChanged += TxtMatKhau_TextChanged;
+            LoadDanhSachVaiTro("NhanVien");
             UpdatePasswordHint();
         }
 
@@ -31,7 +34,7 @@ namespace QuanLyKyTucXa.GUI
 
             this.Text = "Chỉnh sửa tài khoản - " + tk.TenDangNhap;
             lblFormTitle.Text = "CHỈNH SỬA TÀI KHOẢN: " + tk.TenDangNhap;
-            lblFormSub.Text = "Cập nhật họ tên, mật khẩu mới và trạng thái hoạt động";
+            lblFormSub.Text = "Cập nhật họ tên, vai trò, mật khẩu mới và trạng thái hoạt động";
 
             txtTenDangNhap.Text = tk.TenDangNhap;
             txtTenDangNhap.ReadOnly = true;
@@ -44,7 +47,31 @@ namespace QuanLyKyTucXa.GUI
 
             txtHoTen.Text = tk.HoTen;
             chkTrangThai.Checked = tk.TrangThai;
+
+            LoadDanhSachVaiTro(tk.VaiTro);
             UpdatePasswordHint();
+        }
+
+        private void LoadDanhSachVaiTro(string selectedMaVaiTro)
+        {
+            try
+            {
+                DataTable dt = vaiTroBLL.GetAllVaiTro();
+                cmbVaiTro.DisplayMember = "TenVaiTro";
+                cmbVaiTro.ValueMember = "MaVaiTro";
+                cmbVaiTro.DataSource = dt;
+
+                if (!string.IsNullOrWhiteSpace(selectedMaVaiTro) && dt != null)
+                {
+                    cmbVaiTro.SelectedValue = selectedMaVaiTro;
+                    if (cmbVaiTro.SelectedIndex < 0 && cmbVaiTro.Items.Count > 0)
+                        cmbVaiTro.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể nạp danh sách vai trò: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void TxtMatKhau_TextChanged(object sender, EventArgs e)
@@ -64,14 +91,20 @@ namespace QuanLyKyTucXa.GUI
         {
             try
             {
+                string selectedRole = cmbVaiTro.SelectedValue?.ToString() ?? "";
+                if (string.IsNullOrWhiteSpace(selectedRole))
+                {
+                    MessageBox.Show("Vui lòng chọn vai trò cho tài khoản!", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 if (!isEditMode)
                 {
-                    // Thêm mới - Mặc định là quyền Quản trị viên (Admin)
                     TaiKhoanDTO tkNew = new TaiKhoanDTO
                     {
                         TenDangNhap = txtTenDangNhap.Text.Trim(),
                         HoTen = txtHoTen.Text.Trim(),
-                        VaiTro = "Admin",
+                        VaiTro = selectedRole,
                         TrangThai = chkTrangThai.Checked
                     };
 
@@ -80,7 +113,6 @@ namespace QuanLyKyTucXa.GUI
                 }
                 else
                 {
-                    // Kiểm tra bộ lọc độ mạnh mật khẩu trước nếu người dùng có nhập mật khẩu mới
                     string newPassword = txtMatKhau.Text;
                     bool hasNewPassword = !string.IsNullOrEmpty(newPassword);
                     if (hasNewPassword)
@@ -88,12 +120,8 @@ namespace QuanLyKyTucXa.GUI
                         TaiKhoanBLL.ValidatePasswordStrength(newPassword, "Mật khẩu mới");
                     }
 
-                    // Cập nhật thông tin
                     tkCurrent.HoTen = txtHoTen.Text.Trim();
-                    if (string.IsNullOrEmpty(tkCurrent.VaiTro))
-                    {
-                        tkCurrent.VaiTro = "Admin";
-                    }
+                    tkCurrent.VaiTro = selectedRole;
                     tkCurrent.TrangThai = chkTrangThai.Checked;
 
                     taiKhoanBLL.UpdateTaiKhoan(tkCurrent);
@@ -129,4 +157,3 @@ namespace QuanLyKyTucXa.GUI
         }
     }
 }
-

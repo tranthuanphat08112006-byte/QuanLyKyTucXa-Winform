@@ -10,10 +10,15 @@ namespace QuanLyKyTucXa.DAL
     public class TaiKhoanDAL
     {
         private DatabaseHelper dbHelper = new DatabaseHelper();
+        private static bool _schemaEnsured = false;
 
         public TaiKhoanDAL()
         {
-            EnsureSchema();
+            if (!_schemaEnsured)
+            {
+                EnsureSchema();
+                _schemaEnsured = true;
+            }
         }
 
         public void EnsureSchema()
@@ -21,7 +26,7 @@ namespace QuanLyKyTucXa.DAL
             try
             {
                 string sqlSetup = @"
--- 1. Bảng VaiTrò
+-- 1. Bảng VaiTro
 IF OBJECT_ID('VaiTro', 'U') IS NULL
 BEGIN
     CREATE TABLE VaiTro (
@@ -29,14 +34,14 @@ BEGIN
         TenVaiTro NVARCHAR(50) NOT NULL,
         MoTa NVARCHAR(255) NULL
     );
-
-    INSERT INTO VaiTro (MaVaiTro, TenVaiTro, MoTa) VALUES
-    ('Admin', N'Quản trị viên', N'Toàn quyền quản trị hệ thống và quản lý tài khoản'),
-    ('NhanVien', N'Nhân viên', N'Quản lý sinh viên, phòng và hợp đồng ký túc xá'),
-    ('SinhVien', N'Sinh viên', N'Tra cứu thông tin cá nhân và hợp đồng');
 END
 
--- 2. Bảng Tài Khoản (Khởi tạo nếu chưa tồn tại trên CSDL mới)
+IF NOT EXISTS (SELECT 1 FROM VaiTro WHERE MaVaiTro = 'Admin')
+    INSERT INTO VaiTro (MaVaiTro, TenVaiTro, MoTa) VALUES ('Admin', N'Quản trị viên', N'Toàn quyền quản trị hệ thống, tài khoản và phân quyền');
+IF NOT EXISTS (SELECT 1 FROM VaiTro WHERE MaVaiTro = 'NhanVien')
+    INSERT INTO VaiTro (MaVaiTro, TenVaiTro, MoTa) VALUES ('NhanVien', N'Nhân viên', N'Quản lý sinh viên, phòng, hợp đồng và dịch vụ tài chính');
+
+-- 2. Bảng TaiKhoan (Khởi tạo nếu chưa tồn tại trên CSDL mới)
 IF OBJECT_ID('TaiKhoan', 'U') IS NULL
 BEGIN
     CREATE TABLE TaiKhoan (
@@ -50,16 +55,70 @@ BEGIN
     );
 END
 
--- 3. Cập nhật Check Constraint trên TaiKhoan nếu chưa cho phép NhanVien
-IF EXISTS (SELECT * FROM sys.check_constraints WHERE name = 'CK_TaiKhoan_VaiTro')
+-- 3. Gỡ Check Constraint cứng cũ (nếu có) để hỗ trợ vai trò động
+IF EXISTS (SELECT 1 FROM sys.check_constraints WHERE name = 'CK_TaiKhoan_VaiTro')
 BEGIN
     ALTER TABLE TaiKhoan DROP CONSTRAINT CK_TaiKhoan_VaiTro;
 END
 
-ALTER TABLE TaiKhoan ADD CONSTRAINT CK_TaiKhoan_VaiTro 
-    CHECK (VaiTro IN ('Admin', 'NhanVien', 'SinhVien'));
+-- Đồng bộ các mã vai trò lạ (nếu có trên dữ liệu cũ) vào bảng VaiTro trước khi gắn khóa ngoại
+INSERT INTO VaiTro (MaVaiTro, TenVaiTro, MoTa)
+SELECT DISTINCT tk.VaiTro, tk.VaiTro, N'Vai trò tự động đồng bộ từ dữ liệu hiện có'
+FROM TaiKhoan tk
+WHERE tk.VaiTro IS NOT NULL
+  AND NOT EXISTS (SELECT 1 FROM VaiTro vt WHERE vt.MaVaiTro = tk.VaiTro);
 
--- 4. Khởi tạo tài khoản Admin mặc định nếu bảng TaiKhoan đang trống (Mật khẩu: Admin@123)
+-- Gắn khóa ngoại FK_TaiKhoan_VaiTro nếu chưa tồn tại
+IF OBJECT_ID('FK_TaiKhoan_VaiTro', 'F') IS NULL
+BEGIN
+    ALTER TABLE TaiKhoan ADD CONSTRAINT FK_TaiKhoan_VaiTro
+        FOREIGN KEY (VaiTro) REFERENCES VaiTro(MaVaiTro);
+END
+
+-- 4. Bảng PhanQuyen (Ma trận Module x Xem/Thêm/Sửa/Xóa)
+IF OBJECT_ID('PhanQuyen', 'U') IS NULL
+BEGIN
+    CREATE TABLE PhanQuyen (
+        MaVaiTro NVARCHAR(20) NOT NULL,
+        MaModule NVARCHAR(30) NOT NULL,
+        CoQuyenXem BIT NOT NULL DEFAULT 0,
+        CoQuyenThem BIT NOT NULL DEFAULT 0,
+        CoQuyenSua BIT NOT NULL DEFAULT 0,
+        CoQuyenXoa BIT NOT NULL DEFAULT 0,
+        CONSTRAINT PK_PhanQuyen PRIMARY KEY (MaVaiTro, MaModule),
+        CONSTRAINT FK_PhanQuyen_VaiTro FOREIGN KEY (MaVaiTro) REFERENCES VaiTro(MaVaiTro) ON DELETE CASCADE
+    );
+END
+
+-- Khởi tạo quyền mặc định cho Admin (Toàn quyền 6 module)
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'Admin' AND MaModule = 'SinhVien')
+    INSERT INTO PhanQuyen VALUES ('Admin', 'SinhVien', 1, 1, 1, 1);
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'Admin' AND MaModule = 'Phong')
+    INSERT INTO PhanQuyen VALUES ('Admin', 'Phong', 1, 1, 1, 1);
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'Admin' AND MaModule = 'HopDong')
+    INSERT INTO PhanQuyen VALUES ('Admin', 'HopDong', 1, 1, 1, 1);
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'Admin' AND MaModule = 'DichVuTaiChinh')
+    INSERT INTO PhanQuyen VALUES ('Admin', 'DichVuTaiChinh', 1, 1, 1, 1);
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'Admin' AND MaModule = 'ThongKe')
+    INSERT INTO PhanQuyen VALUES ('Admin', 'ThongKe', 1, 1, 1, 1);
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'Admin' AND MaModule = 'TaiKhoan')
+    INSERT INTO PhanQuyen VALUES ('Admin', 'TaiKhoan', 1, 1, 1, 1);
+
+-- Khởi tạo quyền mặc định cho NhanVien (Toàn quyền các module nghiệp vụ & thống kê, không vào Tài khoản)
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'NhanVien' AND MaModule = 'SinhVien')
+    INSERT INTO PhanQuyen VALUES ('NhanVien', 'SinhVien', 1, 1, 1, 1);
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'NhanVien' AND MaModule = 'Phong')
+    INSERT INTO PhanQuyen VALUES ('NhanVien', 'Phong', 1, 1, 1, 1);
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'NhanVien' AND MaModule = 'HopDong')
+    INSERT INTO PhanQuyen VALUES ('NhanVien', 'HopDong', 1, 1, 1, 1);
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'NhanVien' AND MaModule = 'DichVuTaiChinh')
+    INSERT INTO PhanQuyen VALUES ('NhanVien', 'DichVuTaiChinh', 1, 1, 1, 1);
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'NhanVien' AND MaModule = 'ThongKe')
+    INSERT INTO PhanQuyen VALUES ('NhanVien', 'ThongKe', 1, 1, 1, 1);
+IF NOT EXISTS (SELECT 1 FROM PhanQuyen WHERE MaVaiTro = 'NhanVien' AND MaModule = 'TaiKhoan')
+    INSERT INTO PhanQuyen VALUES ('NhanVien', 'TaiKhoan', 0, 0, 0, 0);
+
+-- 5. Khởi tạo tài khoản Admin mặc định nếu bảng TaiKhoan đang trống (Mật khẩu: Admin@123)
 IF NOT EXISTS (SELECT 1 FROM TaiKhoan WHERE VaiTro = 'Admin')
 BEGIN
     INSERT INTO TaiKhoan (TenDangNhap, MatKhau, HoTen, VaiTro, TrangThai, NgayTao)
@@ -77,9 +136,10 @@ END
         public TaiKhoanDTO GetTaiKhoanByUsername(string tenDangNhap)
         {
             string query = @"
-                SELECT MaTaiKhoan, TenDangNhap, MatKhau, HoTen, VaiTro, TrangThai, NgayTao 
-                FROM TaiKhoan 
-                WHERE TenDangNhap = @TenDangNhap";
+                SELECT tk.MaTaiKhoan, tk.TenDangNhap, tk.MatKhau, tk.HoTen, tk.VaiTro, vt.TenVaiTro, tk.TrangThai, tk.NgayTao 
+                FROM TaiKhoan tk
+                LEFT JOIN VaiTro vt ON vt.MaVaiTro = tk.VaiTro
+                WHERE tk.TenDangNhap = @TenDangNhap";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -90,7 +150,7 @@ END
             if (dt != null && dt.Rows.Count > 0)
             {
                 DataRow r = dt.Rows[0];
-                return new TaiKhoanDTO(
+                var dto = new TaiKhoanDTO(
                     Convert.ToInt32(r["MaTaiKhoan"]),
                     r["TenDangNhap"]?.ToString(),
                     r["MatKhau"]?.ToString(),
@@ -99,6 +159,8 @@ END
                     r["TrangThai"] != DBNull.Value && Convert.ToBoolean(r["TrangThai"]),
                     r["NgayTao"] != DBNull.Value ? Convert.ToDateTime(r["NgayTao"]) : DateTime.Now
                 );
+                dto.TenVaiTro = r["TenVaiTro"] != DBNull.Value ? r["TenVaiTro"].ToString() : null;
+                return dto;
             }
             return null;
         }
@@ -106,9 +168,10 @@ END
         public TaiKhoanDTO GetTaiKhoanById(int maTaiKhoan)
         {
             string query = @"
-                SELECT MaTaiKhoan, TenDangNhap, MatKhau, HoTen, VaiTro, TrangThai, NgayTao 
-                FROM TaiKhoan 
-                WHERE MaTaiKhoan = @MaTaiKhoan";
+                SELECT tk.MaTaiKhoan, tk.TenDangNhap, tk.MatKhau, tk.HoTen, tk.VaiTro, vt.TenVaiTro, tk.TrangThai, tk.NgayTao 
+                FROM TaiKhoan tk
+                LEFT JOIN VaiTro vt ON vt.MaVaiTro = tk.VaiTro
+                WHERE tk.MaTaiKhoan = @MaTaiKhoan";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -119,7 +182,7 @@ END
             if (dt != null && dt.Rows.Count > 0)
             {
                 DataRow r = dt.Rows[0];
-                return new TaiKhoanDTO(
+                var dto = new TaiKhoanDTO(
                     Convert.ToInt32(r["MaTaiKhoan"]),
                     r["TenDangNhap"]?.ToString(),
                     r["MatKhau"]?.ToString(),
@@ -128,6 +191,8 @@ END
                     r["TrangThai"] != DBNull.Value && Convert.ToBoolean(r["TrangThai"]),
                     r["NgayTao"] != DBNull.Value ? Convert.ToDateTime(r["NgayTao"]) : DateTime.Now
                 );
+                dto.TenVaiTro = r["TenVaiTro"] != DBNull.Value ? r["TenVaiTro"].ToString() : null;
+                return dto;
             }
             return null;
         }
@@ -146,12 +211,9 @@ END
                     tk.TrangThai, 
                     tk.NgayTao,
                     CASE WHEN tk.TrangThai = 1 THEN N'Hoạt động' ELSE N'Bị khóa' END AS TrangThaiHienThi,
-                    CASE 
-                        WHEN tk.VaiTro = 'Admin' THEN N'Quản trị viên' 
-                        WHEN tk.VaiTro = 'NhanVien' THEN N'Nhân viên' 
-                        ELSE N'Sinh viên' 
-                    END AS VaiTroHienThi
+                    ISNULL(vt.TenVaiTro, tk.VaiTro) AS VaiTroHienThi
                 FROM TaiKhoan tk
+                LEFT JOIN VaiTro vt ON vt.MaVaiTro = tk.VaiTro
                 ORDER BY tk.MaTaiKhoan DESC";
 
             return dbHelper.ExecuteQuery(query);
@@ -164,19 +226,14 @@ END
 
             if (!string.IsNullOrWhiteSpace(keyword))
             {
-                conditions.Add("(tk.TenDangNhap LIKE @Keyword OR tk.HoTen LIKE @Keyword)");
+                conditions.Add("(tk.TenDangNhap LIKE @Keyword OR tk.HoTen LIKE @Keyword OR vt.TenVaiTro LIKE @Keyword)");
                 parameters.Add(new SqlParameter("@Keyword", "%" + keyword.Trim() + "%"));
             }
 
             if (!string.IsNullOrWhiteSpace(vaiTro) && vaiTro != "Tất cả vai trò")
             {
-                string dbRole = vaiTro;
-                if (vaiTro == "Quản trị viên") dbRole = "Admin";
-                else if (vaiTro == "Nhân viên") dbRole = "NhanVien";
-                else if (vaiTro == "Sinh viên") dbRole = "SinhVien";
-
-                conditions.Add("tk.VaiTro = @VaiTro");
-                parameters.Add(new SqlParameter("@VaiTro", dbRole));
+                conditions.Add("(tk.VaiTro = @VaiTro OR vt.TenVaiTro = @VaiTro)");
+                parameters.Add(new SqlParameter("@VaiTro", vaiTro.Trim()));
             }
 
             if (!string.IsNullOrWhiteSpace(trangThai) && trangThai != "Tất cả trạng thái")
@@ -201,12 +258,9 @@ END
                     tk.TrangThai, 
                     tk.NgayTao,
                     CASE WHEN tk.TrangThai = 1 THEN N'Hoạt động' ELSE N'Bị khóa' END AS TrangThaiHienThi,
-                    CASE 
-                        WHEN tk.VaiTro = 'Admin' THEN N'Quản trị viên' 
-                        WHEN tk.VaiTro = 'NhanVien' THEN N'Nhân viên' 
-                        ELSE N'Sinh viên' 
-                    END AS VaiTroHienThi
-                FROM TaiKhoan tk"
+                    ISNULL(vt.TenVaiTro, tk.VaiTro) AS VaiTroHienThi
+                FROM TaiKhoan tk
+                LEFT JOIN VaiTro vt ON vt.MaVaiTro = tk.VaiTro"
                 + whereClause + " ORDER BY tk.MaTaiKhoan DESC";
 
             return dbHelper.ExecuteQuery(query, parameters.Count > 0 ? parameters.ToArray() : null);

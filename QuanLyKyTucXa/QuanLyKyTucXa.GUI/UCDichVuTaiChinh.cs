@@ -4,6 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using QuanLyKyTucXa.BLL;
+using QuanLyKyTucXa.DTO;
 
 namespace QuanLyKyTucXa.GUI
 {
@@ -33,7 +34,18 @@ namespace QuanLyKyTucXa.GUI
             InitFilterControls();
             isFilterLoading = false;
 
+            ApplyPermissions();
             SwitchTab(0);
+        }
+
+        private void ApplyPermissions()
+        {
+            bool canAdd = UserSession.CanAdd(ModuleSystem.DichVuTaiChinh);
+            bool canEdit = UserSession.CanEdit(ModuleSystem.DichVuTaiChinh);
+
+            btnLapHoaDon.Visible = canAdd;
+            btnGhiDienNuoc.Visible = canAdd;
+            btnCauHinhGia.Visible = canEdit;
         }
 
         public void RefreshAllData()
@@ -135,20 +147,23 @@ namespace QuanLyKyTucXa.GUI
             // Bật / tắt bộ lọc trạng thái chỉ dùng cho Tab Hóa đơn
             pnlTrangThaiGroup.Visible = (tabIndex == 0);
 
-            // Cập nhật cấu hình nút hành động
+            bool canEdit = UserSession.CanEdit(ModuleSystem.DichVuTaiChinh);
+            bool canDelete = UserSession.CanDelete(ModuleSystem.DichVuTaiChinh);
+
+            // Cập nhật cấu hình nút hành động theo tab và phân quyền
             if (tabIndex == 0)
             {
-                btnThanhToan.Visible = true;
+                btnThanhToan.Visible = canEdit;
                 btnSua.Visible = false;
-                btnXoa.Visible = true;
+                btnXoa.Visible = canDelete;
                 btnXoa.Text = "Xóa HĐ";
             }
             else if (tabIndex == 1)
             {
                 btnThanhToan.Visible = false;
-                btnSua.Visible = true;
+                btnSua.Visible = canEdit;
                 btnSua.Text = "Sửa số";
-                btnXoa.Visible = true;
+                btnXoa.Visible = canDelete;
                 btnXoa.Text = "Xóa số";
             }
             else
@@ -464,6 +479,8 @@ namespace QuanLyKyTucXa.GUI
         private void UpdateActionButtonsState()
         {
             DataGridViewRow row = GetSelectedRow();
+            bool canEdit = UserSession.CanEdit(ModuleSystem.DichVuTaiChinh);
+            bool canDelete = UserSession.CanDelete(ModuleSystem.DichVuTaiChinh);
 
             if (currentTabIndex == 0) // HÓA ĐƠN
             {
@@ -474,8 +491,8 @@ namespace QuanLyKyTucXa.GUI
                     conNo = Convert.ToDecimal(row.Cells["ConNo"].Value ?? 0);
                 }
 
-                btnThanhToan.Enabled = hasRow && conNo > 0;
-                btnXoa.Enabled = hasRow;
+                btnThanhToan.Enabled = hasRow && conNo > 0 && canEdit;
+                btnXoa.Enabled = hasRow && canDelete;
 
                 if (btnThanhToan.Enabled)
                 {
@@ -491,8 +508,8 @@ namespace QuanLyKyTucXa.GUI
             else if (currentTabIndex == 1) // ĐIỆN NƯỚC
             {
                 bool hasRow = row != null;
-                btnSua.Enabled = hasRow;
-                btnXoa.Enabled = hasRow;
+                btnSua.Enabled = hasRow && canEdit;
+                btnXoa.Enabled = hasRow && canDelete;
             }
         }
 

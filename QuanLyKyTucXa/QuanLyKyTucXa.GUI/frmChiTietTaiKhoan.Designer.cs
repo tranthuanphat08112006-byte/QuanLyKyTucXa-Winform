@@ -27,6 +27,8 @@ namespace QuanLyKyTucXa.GUI
             this.txtMatKhau = new System.Windows.Forms.TextBox();
             this.lblHoTen = new System.Windows.Forms.Label();
             this.txtHoTen = new System.Windows.Forms.TextBox();
+            this.lblVaiTro = new System.Windows.Forms.Label();
+            this.cmbVaiTro = new System.Windows.Forms.ComboBox();
             this.chkTrangThai = new System.Windows.Forms.CheckBox();
             this.lblGhiChuVaiTro = new System.Windows.Forms.Label();
             this.pnlFooter = new System.Windows.Forms.Panel();
@@ -80,13 +82,15 @@ namespace QuanLyKyTucXa.GUI
             this.pnlBody.Controls.Add(this.txtMatKhau);
             this.pnlBody.Controls.Add(this.lblHoTen);
             this.pnlBody.Controls.Add(this.txtHoTen);
+            this.pnlBody.Controls.Add(this.lblVaiTro);
+            this.pnlBody.Controls.Add(this.cmbVaiTro);
             this.pnlBody.Controls.Add(this.chkTrangThai);
             this.pnlBody.Controls.Add(this.lblGhiChuVaiTro);
             this.pnlBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlBody.Location = new System.Drawing.Point(0, 80);
             this.pnlBody.Name = "pnlBody";
             this.pnlBody.Padding = new System.Windows.Forms.Padding(28, 20, 28, 20);
-            this.pnlBody.Size = new System.Drawing.Size(520, 215);
+            this.pnlBody.Size = new System.Drawing.Size(520, 280);
             this.pnlBody.TabIndex = 1;
             // 
             // lblTenDangNhap
@@ -147,6 +151,27 @@ namespace QuanLyKyTucXa.GUI
             this.txtHoTen.Size = new System.Drawing.Size(460, 25);
             this.txtHoTen.TabIndex = 5;
             // 
+            // lblVaiTro
+            // 
+            this.lblVaiTro.AutoSize = true;
+            this.lblVaiTro.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lblVaiTro.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
+            this.lblVaiTro.Location = new System.Drawing.Point(28, 142);
+            this.lblVaiTro.Name = "lblVaiTro";
+            this.lblVaiTro.Size = new System.Drawing.Size(76, 17);
+            this.lblVaiTro.TabIndex = 6;
+            this.lblVaiTro.Text = "Vai trò (*):";
+            // 
+            // cmbVaiTro
+            // 
+            this.cmbVaiTro.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVaiTro.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.cmbVaiTro.FormattingEnabled = true;
+            this.cmbVaiTro.Location = new System.Drawing.Point(30, 164);
+            this.cmbVaiTro.Name = "cmbVaiTro";
+            this.cmbVaiTro.Size = new System.Drawing.Size(460, 25);
+            this.cmbVaiTro.TabIndex = 7;
+            // 
             // chkTrangThai
             // 
             this.chkTrangThai.AutoSize = true;
@@ -154,10 +179,10 @@ namespace QuanLyKyTucXa.GUI
             this.chkTrangThai.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkTrangThai.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.chkTrangThai.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
-            this.chkTrangThai.Location = new System.Drawing.Point(30, 145);
+            this.chkTrangThai.Location = new System.Drawing.Point(30, 206);
             this.chkTrangThai.Name = "chkTrangThai";
             this.chkTrangThai.Size = new System.Drawing.Size(375, 21);
-            this.chkTrangThai.TabIndex = 6;
+            this.chkTrangThai.TabIndex = 8;
             this.chkTrangThai.Text = "Kích hoạt hoạt động (Cho phép tài khoản đăng nhập hệ thống)";
             this.chkTrangThai.UseVisualStyleBackColor = true;
             // 
@@ -166,11 +191,11 @@ namespace QuanLyKyTucXa.GUI
             this.lblGhiChuVaiTro.AutoSize = true;
             this.lblGhiChuVaiTro.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Italic);
             this.lblGhiChuVaiTro.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblGhiChuVaiTro.Location = new System.Drawing.Point(28, 175);
+            this.lblGhiChuVaiTro.Location = new System.Drawing.Point(28, 238);
             this.lblGhiChuVaiTro.Name = "lblGhiChuVaiTro";
             this.lblGhiChuVaiTro.Size = new System.Drawing.Size(347, 13);
-            this.lblGhiChuVaiTro.TabIndex = 7;
-            this.lblGhiChuVaiTro.Text = "💡 Tài khoản mặc định có vai trò Quản trị viên quản lý hệ thống ký túc xá.";
+            this.lblGhiChuVaiTro.TabIndex = 9;
+            this.lblGhiChuVaiTro.Text = "💡 Mật khẩu cần: ≥6 ký tự, chữ hoa, chữ thường, số và ký tự đặc biệt.";
             // 
             // pnlFooter
             // 
@@ -223,7 +248,7 @@ namespace QuanLyKyTucXa.GUI
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnHuy;
-            this.ClientSize = new System.Drawing.Size(520, 355);
+            this.ClientSize = new System.Drawing.Size(520, 420);
             this.Controls.Add(this.pnlFooter);
             this.Controls.Add(this.pnlBody);
             this.Controls.Add(this.pnlHeader);
@@ -255,6 +280,8 @@ namespace QuanLyKyTucXa.GUI
         private System.Windows.Forms.TextBox txtMatKhau;
         private System.Windows.Forms.Label lblHoTen;
         private System.Windows.Forms.TextBox txtHoTen;
+        private System.Windows.Forms.Label lblVaiTro;
+        private System.Windows.Forms.ComboBox cmbVaiTro;
         private System.Windows.Forms.CheckBox chkTrangThai;
         private System.Windows.Forms.Label lblGhiChuVaiTro;
         private System.Windows.Forms.Panel pnlFooter;

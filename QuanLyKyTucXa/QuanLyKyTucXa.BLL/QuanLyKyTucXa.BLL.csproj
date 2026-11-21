@@ -48,6 +48,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,7 +65,10 @@
     <Compile Include="PhongBLL.cs" />
     <Compile Include="TaiKhoanBLL.cs" />
     <Compile Include="ThanhToanBLL.cs" />
+    <Compile Include="ThongKeBLL.cs" />
+    <Compile Include="VaiTroBLL.cs" />
     <Compile Include="UTIL\PasswordCheck.cs" />
+    <Compile Include="UTIL\XlsxWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuanLyKyTucXa.DAL\QuanLyKyTucXa.DAL.csproj">

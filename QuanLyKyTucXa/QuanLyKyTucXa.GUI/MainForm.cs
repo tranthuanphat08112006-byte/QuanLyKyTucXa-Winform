@@ -18,6 +18,7 @@ namespace QuanLyKyTucXa.GUI
         private UCPhong ucPhong;
         private UCHopDong ucHopDong;
         private UCDichVuTaiChinh ucDichVuTaiChinh;
+        private UCThongKe ucThongKe;
         private UCTaiKhoan ucTaiKhoan;
 
         public MainForm()
@@ -50,6 +51,7 @@ namespace QuanLyKyTucXa.GUI
             this.btnPhong.Image = IconHelper.CreateRoomIcon(Color.FromArgb(203, 213, 225), 20);
             this.btnHopDong.Image = IconHelper.CreateContractIcon(Color.FromArgb(203, 213, 225), 20);
             this.btnDichVuTaiChinh.Image = IconHelper.CreateFinanceIcon(Color.FromArgb(203, 213, 225), 20);
+            this.btnThongKe.Image = IconHelper.CreateChartIcon(Color.FromArgb(203, 213, 225), 20);
             this.btnTaiKhoan.Image = IconHelper.CreateAccountIcon(Color.FromArgb(203, 213, 225), 20);
             this.btnDoiMatKhau.Image = IconHelper.CreateKeyIcon(Color.FromArgb(203, 213, 225), 18);
             this.btnDangXuat.Image = IconHelper.CreateLogoutIcon(Color.FromArgb(248, 113, 113), 18);
@@ -64,15 +66,54 @@ namespace QuanLyKyTucXa.GUI
                 this.lblUserRole.Text = "● Vai trò: " + QuanLyKyTucXa.DTO.UserSession.CurrentUser.VaiTroHienThi;
             }
 
-            // Phân quyền giao diện: Chỉ Admin mới thấy Quản lý tài khoản
-            if (!QuanLyKyTucXa.DTO.UserSession.IsAdmin)
-            {
-                this.btnTaiKhoan.Visible = false;
-                this.pnlSpacer5.Visible = false;
-            }
+            // Phân quyền giao diện theo ma trận quyền của vai trò đang đăng nhập
+            bool canViewSinhVien = QuanLyKyTucXa.DTO.UserSession.CanView(QuanLyKyTucXa.DTO.ModuleSystem.SinhVien);
+            bool canViewPhong = QuanLyKyTucXa.DTO.UserSession.CanView(QuanLyKyTucXa.DTO.ModuleSystem.Phong);
+            bool canViewHopDong = QuanLyKyTucXa.DTO.UserSession.CanView(QuanLyKyTucXa.DTO.ModuleSystem.HopDong);
+            bool canViewDichVu = QuanLyKyTucXa.DTO.UserSession.CanView(QuanLyKyTucXa.DTO.ModuleSystem.DichVuTaiChinh);
+            bool canViewThongKe = QuanLyKyTucXa.DTO.UserSession.CanView(QuanLyKyTucXa.DTO.ModuleSystem.ThongKe);
+            bool canViewTaiKhoan = QuanLyKyTucXa.DTO.UserSession.CanView(QuanLyKyTucXa.DTO.ModuleSystem.TaiKhoan);
 
-            // Mở mặc định màn hình Quản lý Sinh viên
-            btnSinhVien_Click(this.btnSinhVien, EventArgs.Empty);
+            this.btnSinhVien.Visible = canViewSinhVien;
+            this.pnlSpacer1.Visible = canViewSinhVien;
+            this.btnPhong.Visible = canViewPhong;
+            this.pnlSpacer2.Visible = canViewPhong;
+            this.btnHopDong.Visible = canViewHopDong;
+            this.pnlSpacer3.Visible = canViewHopDong;
+            this.btnDichVuTaiChinh.Visible = canViewDichVu;
+            this.pnlSpacer4.Visible = canViewDichVu;
+            this.btnThongKe.Visible = canViewThongKe;
+            this.pnlSpacer6.Visible = canViewThongKe;
+            this.btnTaiKhoan.Visible = canViewTaiKhoan;
+            this.pnlSpacer5.Visible = canViewTaiKhoan;
+
+            // Tự động mở màn hình đầu tiên mà tài khoản có quyền xem
+            if (canViewSinhVien)
+                btnSinhVien_Click(this.btnSinhVien, EventArgs.Empty);
+            else if (canViewPhong)
+                btnPhong_Click(this.btnPhong, EventArgs.Empty);
+            else if (canViewHopDong)
+                btnHopDong_Click(this.btnHopDong, EventArgs.Empty);
+            else if (canViewDichVu)
+                btnDichVuTaiChinh_Click(this.btnDichVuTaiChinh, EventArgs.Empty);
+            else if (canViewThongKe)
+                btnThongKe_Click(this.btnThongKe, EventArgs.Empty);
+            else if (canViewTaiKhoan)
+                btnTaiKhoan_Click(this.btnTaiKhoan, EventArgs.Empty);
+            else
+            {
+                pnlContainer.Controls.Clear();
+                lblHeaderTitle.Text = "Không có quyền truy cập";
+                Label lblNoPerm = new Label
+                {
+                    Text = "Tài khoản của bạn chưa được cấp quyền xem module nào.\nVui lòng liên hệ Quản trị viên để được phân quyền.",
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new Font("Segoe UI", 12F, FontStyle.Regular),
+                    ForeColor = Color.FromArgb(100, 116, 139)
+                };
+                pnlContainer.Controls.Add(lblNoPerm);
+            }
         }
 
         private void PnlHeader_MouseDown(object sender, MouseEventArgs e)
@@ -149,6 +190,9 @@ namespace QuanLyKyTucXa.GUI
             btnDichVuTaiChinh.IsActive = false;
             btnDichVuTaiChinh.Image = IconHelper.CreateFinanceIcon(inactiveColor, 20);
 
+            btnThongKe.IsActive = false;
+            btnThongKe.Image = IconHelper.CreateChartIcon(inactiveColor, 20);
+
             btnTaiKhoan.IsActive = false;
             btnTaiKhoan.Image = IconHelper.CreateAccountIcon(inactiveColor, 20);
 
@@ -161,6 +205,8 @@ namespace QuanLyKyTucXa.GUI
                 btnHopDong.Image = IconHelper.CreateContractIcon(Color.White, 20);
             else if (selectedBtn == btnDichVuTaiChinh)
                 btnDichVuTaiChinh.Image = IconHelper.CreateFinanceIcon(Color.White, 20);
+            else if (selectedBtn == btnThongKe)
+                btnThongKe.Image = IconHelper.CreateChartIcon(Color.White, 20);
             else if (selectedBtn == btnTaiKhoan)
                 btnTaiKhoan.Image = IconHelper.CreateAccountIcon(Color.White, 20);
         }
@@ -213,12 +259,29 @@ namespace QuanLyKyTucXa.GUI
             if (!isFirstLoad) ucDichVuTaiChinh.RefreshAllData();
         }
 
+        private void btnThongKe_Click(object sender, EventArgs e)
+        {
+            if (!QuanLyKyTucXa.DTO.UserSession.CanView(QuanLyKyTucXa.DTO.ModuleSystem.ThongKe))
+            {
+                MessageBox.Show("Bạn không có quyền truy cập module Thống kê & Báo cáo!", "Từ chối truy cập", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SetActiveButton(btnThongKe);
+            bool isFirstLoad = ucThongKe == null;
+            if (isFirstLoad) ucThongKe = new UCThongKe();
+
+            LoadUserControl(ucThongKe, "Quản lý Thống kê & Báo cáo");
+
+            if (!isFirstLoad) ucThongKe.RefreshAllData();
+        }
+
         private void btnTaiKhoan_Click(object sender, EventArgs e)
         {
             // Kiểm tra quyền nghiệp vụ
-            if (!QuanLyKyTucXa.DTO.UserSession.IsAdmin)
+            if (!QuanLyKyTucXa.DTO.UserSession.CanView(QuanLyKyTucXa.DTO.ModuleSystem.TaiKhoan))
             {
-                MessageBox.Show("Bạn không có quyền truy cập module Quản lý tài khoản!", "Từ chối truy cập", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Bạn không có quyền truy cập module Quản lý tài khoản & phân quyền!", "Từ chối truy cập", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

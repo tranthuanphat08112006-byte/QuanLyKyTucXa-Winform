@@ -45,6 +45,11 @@ IF COL_LENGTH('Phong', 'TrangThaiPhong') IS NULL
 BEGIN
     ALTER TABLE Phong ADD TrangThaiPhong NVARCHAR(50) NULL;
     EXEC('UPDATE Phong SET TrangThaiPhong = CASE WHEN SoGiuongTrong <= 0 THEN N''Đã đầy'' ELSE N''Còn trống'' END WHERE TrangThaiPhong IS NULL');
+END
+
+IF COL_LENGTH('Phong', 'LoaiPhong') IS NOT NULL AND COL_LENGTH('Phong', 'LoaiPhong') < 200
+BEGIN
+    ALTER TABLE Phong ALTER COLUMN LoaiPhong NVARCHAR(100) NULL;
 END";
                 dbHelper.ExecuteNonQuery(sqlAlterPhong);
 

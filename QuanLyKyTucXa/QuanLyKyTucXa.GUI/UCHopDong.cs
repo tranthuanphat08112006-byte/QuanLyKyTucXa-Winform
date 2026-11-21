@@ -4,6 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using QuanLyKyTucXa.BLL;
+using QuanLyKyTucXa.DTO;
 
 namespace QuanLyKyTucXa.GUI
 {
@@ -41,7 +42,15 @@ namespace QuanLyKyTucXa.GUI
             {
             }
 
+            ApplyPermissions();
             RefreshAllData();
+        }
+
+        private void ApplyPermissions()
+        {
+            btnLapHopDong.Visible = UserSession.CanAdd(ModuleSystem.HopDong);
+            btnChuyenPhong.Visible = UserSession.CanEdit(ModuleSystem.HopDong);
+            btnThanhLy.Visible = UserSession.CanDelete(ModuleSystem.HopDong);
         }
 
         public void RefreshAllData()
@@ -187,22 +196,30 @@ namespace QuanLyKyTucXa.GUI
                 isActive = string.Equals(trangThai, "Đang hiệu lực", StringComparison.OrdinalIgnoreCase);
             }
 
-            btnChuyenPhong.Enabled = isActive;
-            btnThanhLy.Enabled = isActive;
+            bool canEdit = UserSession.CanEdit(ModuleSystem.HopDong);
+            bool canDelete = UserSession.CanDelete(ModuleSystem.HopDong);
 
-            if (isActive)
+            btnChuyenPhong.Enabled = isActive && canEdit;
+            btnThanhLy.Enabled = isActive && canDelete;
+
+            if (btnChuyenPhong.Enabled)
             {
                 btnChuyenPhong.BackColor = Color.FromArgb(2, 132, 199);
                 btnChuyenPhong.ForeColor = Color.White;
-
-                btnThanhLy.BackColor = Color.FromArgb(220, 38, 38);
-                btnThanhLy.ForeColor = Color.White;
             }
             else
             {
                 btnChuyenPhong.BackColor = Color.FromArgb(226, 232, 240);
                 btnChuyenPhong.ForeColor = Color.FromArgb(148, 163, 184);
+            }
 
+            if (btnThanhLy.Enabled)
+            {
+                btnThanhLy.BackColor = Color.FromArgb(220, 38, 38);
+                btnThanhLy.ForeColor = Color.White;
+            }
+            else
+            {
                 btnThanhLy.BackColor = Color.FromArgb(226, 232, 240);
                 btnThanhLy.ForeColor = Color.FromArgb(148, 163, 184);
             }

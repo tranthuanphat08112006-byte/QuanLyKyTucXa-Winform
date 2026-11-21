@@ -46,10 +46,13 @@
     <Compile Include="DienNuocDTO.cs" />
     <Compile Include="HoaDonDTO.cs" />
     <Compile Include="HopDongDTO.cs" />
+    <Compile Include="ModuleSystem.cs" />
+    <Compile Include="PhanQuyenDTO.cs" />
     <Compile Include="Phong.cs" />
     <Compile Include="SinhVien.cs" />
     <Compile Include="TaiKhoanDTO.cs" />
     <Compile Include="ThanhToanDTO.cs" />
+    <Compile Include="ThongKeDTO.cs" />
     <Compile Include="VaiTroDTO.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

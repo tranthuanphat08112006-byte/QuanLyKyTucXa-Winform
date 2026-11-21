@@ -33,7 +33,22 @@ namespace QuanLyKyTucXa.GUI
             isFilterLoading = false;
 
             // 2. Tải dữ liệu danh sách phòng và dãy nhà
+            ApplyPermissions();
             RefreshAllData();
+        }
+
+        private void ApplyPermissions()
+        {
+            bool canAdd = UserSession.CanAdd(ModuleSystem.Phong);
+            bool canEdit = UserSession.CanEdit(ModuleSystem.Phong);
+            bool canDelete = UserSession.CanDelete(ModuleSystem.Phong);
+
+            btnThemMoi.Visible = canAdd;
+            btnThemDayNha.Visible = canAdd;
+            btn_Sua.Visible = canEdit;
+            btnSuaDayNha.Visible = canEdit;
+            btn_Xoa.Visible = canDelete;
+            btnXoaDayNha.Visible = canDelete;
         }
 
         public void RefreshAllData()
@@ -470,7 +485,7 @@ namespace QuanLyKyTucXa.GUI
 
         private void dgvDayNha_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && UserSession.CanEdit(ModuleSystem.Phong))
             {
                 btnSuaDayNha_Click(sender, e);
             }

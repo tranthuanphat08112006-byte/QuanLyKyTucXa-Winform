@@ -151,6 +151,12 @@
     <Compile Include="frmChiTietTaiKhoan.Designer.cs">
       <DependentUpon>frmChiTietTaiKhoan.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmChiTietVaiTro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChiTietVaiTro.Designer.cs">
+      <DependentUpon>frmChiTietVaiTro.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmDoiMatKhau.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +168,12 @@
     </Compile>
     <Compile Include="UCTaiKhoan.Designer.cs">
       <DependentUpon>UCTaiKhoan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCThongKe.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCThongKe.Designer.cs">
+      <DependentUpon>UCThongKe.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="frmChiTietDayNha.resx">
       <DependentUpon>frmChiTietDayNha.cs</DependentUpon>
